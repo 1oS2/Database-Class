@@ -59,8 +59,8 @@ create table alumno (
 	correo nvarchar(50) null,
 	telefono nvarchar(9) null,
 	id_distrito int not null,
-	id_carrera int not null,  -- Añadir columna id_carrera
-	id_campus int not null,   -- Añadir columna id_campus
+	id_carrera int not null, 
+	id_campus int not null,   
 	foreign key (id_distrito) references distrito(id_distrito),
 	foreign key (id_carrera) references carrera(id_carrera),
 	foreign key (id_campus) references campus(id_campus)
@@ -70,17 +70,36 @@ create table matricula (
 	id_matricula int primary key identity(1,1),
 	fecha_matricula date not null,
 	vigencia char(1) not null,
-	id_semestre int,
+	id_semestre int not null,
 	id_distrito int not null,
 	id_carrera int not null,
 	id_campus int not null,
-	id_alumno int,
+	id_alumno int not null,
 	foreign key (id_semestre) references semestre(id_semestre),
 	foreign key (id_distrito) references distrito(id_distrito),
 	foreign key (id_carrera) references carrera(id_carrera),
 	foreign key (id_campus) references campus(id_campus),
 	foreign key (id_alumno) references alumno(id_alumno)
 );
+
+CREATE TABLE pago (
+    id_pago  int identity (1,1) primary key,
+    id_estudiante  int not null,
+    monto  decimal(10, 2) not null,
+    fecha_limite date not null,
+    metodo_pago  nvarchar(50) not null
+);
+
+CREATE TABLE detalle_matricula_pago (
+    id_detalle INT primary key IDENTITY(1,1),
+    id_matricula INT not null,
+    id_pago INT not null,
+    monto_pagado DECIMAL(10,2) not null,
+    fecha_pago DATE not null,
+    foreign key(id_matricula) REFERENCES matricula(id_matricula),
+    foreign key(id_pago) REFERENCES Pagos(id_pago)
+);
+
 
 create table grupo (
 	id_grupo int primary key identity(1,1),
@@ -93,8 +112,8 @@ create table detalle_matricula (
 	grupo_id int not null,
 	nota int null,
 	primary key(matricula_id, grupo_id),
-	foreign key (grupo_id) references grupo(id_grupo),
-	foreign key (matricula_id) references matricula(id_matricula)
+	foreign key(grupo_id) references grupo(id_grupo),
+	foreign key(matricula_id) references matricula(id_matricula)
 );
 
 create table curso (
@@ -107,8 +126,8 @@ create table detalle_grupo_curso (
 	id_grupo int not null,
 	id_curso int not null,
 	primary key (id_grupo, id_curso),
-	foreign key (id_grupo) references grupo(id_grupo),
-	foreign key (id_curso) references curso(id_curso)
+	foreign key(id_grupo) references grupo(id_grupo),
+	foreign key(id_curso) references curso(id_curso)
 );
 
 create table docente (
@@ -213,16 +232,25 @@ VALUES
 
 INSERT INTO semestre (denominacion, fecha_inicio, fecha_fin) 
 VALUES 
-    ('2023-I', '2023-03-01', '2023-07-15'), ('2023-II', '2023-08-01', '2023-12-15'), 
-    ('2024-I', '2024-03-01', '2024-07-15'), ('2024-II', '2024-08-01', '2024-12-15'),
-    ('2025-I', '2025-03-01', '2025-07-15'), ('2025-II', '2025-08-01', '2025-12-15'),
-    ('2026-I', '2026-03-01', '2026-07-15'), ('2026-II', '2026-08-01', '2026-12-15'),
-    ('2027-I', '2027-03-01', '2027-07-15'), ('2027-II', '2027-08-01', '2027-12-15'),
-    ('2028-I', '2028-03-01', '2028-07-15'), ('2028-II', '2028-08-01', '2028-12-15'),
-    ('2029-I', '2029-03-01', '2029-07-15'), ('2029-II', '2029-08-01', '2029-12-15'),
-    ('2030-I', '2030-03-01', '2030-07-15'), ('2030-II', '2030-08-01', '2030-12-15'),
-    ('2031-I', '2031-03-01', '2031-07-15'), ('2031-II', '2031-08-01', '2031-12-15'),
-    ('2032-I', '2032-03-01', '2032-07-15');
+    ('2023-I',  '2023-03-01', '2023-07-15'), 
+	('2023-II', '2023-08-01', '2023-12-15'), 
+    ('2024-I',  '2024-03-01', '2024-07-15'), 
+	('2024-II', '2024-08-01', '2024-12-15'),
+    ('2025-I',  '2025-03-01', '2025-07-15'), 
+	('2025-II', '2025-08-01', '2025-12-15'),
+    ('2026-I',  '2026-03-01', '2026-07-15'), 
+	('2026-II', '2026-08-01', '2026-12-15'),
+    ('2027-I',  '2027-03-01', '2027-07-15'), 
+	('2027-II', '2027-08-01', '2027-12-15'),
+    ('2028-I',  '2028-03-01', '2028-07-15'), 
+	('2028-II', '2028-08-01', '2028-12-15'),
+    ('2029-I',  '2029-03-01', '2029-07-15'), 
+	('2029-II', '2029-08-01', '2029-12-15'),
+    ('2030-I',  '2030-03-01', '2030-07-15'), 
+	('2030-II', '2030-08-01', '2030-12-15'),
+    ('2031-I',  '2031-03-01', '2031-07-15'), 
+	('2031-II', '2031-08-01', '2031-12-15'),
+    ('2032-I',  '2032-03-01', '2032-07-15');
  
 INSERT INTO alumno (nombre, apellido, dni, correo, telefono, id_distrito, id_carrera, id_campus)
 VALUES 
@@ -411,3 +439,50 @@ VALUES
 (18, 18), 
 (19, 19), 
 (20, 20); 
+
+INSERT INTO pago (id_estudiante, monto, fecha_limite, metodo_pago) VALUES
+(1,  3000.00, '2032-07-22', 'Tarjeta de débito');
+(2,  1850.00,   '2023-03-01', 'Tarjeta de crédito'),
+(3,  1600.00,  '2023-08-01', 'Transferencia bancaria'),
+(4,  1750.50,  '2024-03-01', 'Efectivo'),
+(5,  1900.00,  '2024-08-01', 'Tarjeta de débito'),
+(6,  1550.00,   '2025-03-01', 'Tarjeta de crédito'),
+(7,  2250.50,   '2025-08-01', 'Efectivo'),
+(8,  1800.00,   '2026-03-01', 'Tarjeta de crédito'),
+(9,  2000.00,   '2026-08-01', 'Transferencia bancaria'),
+(10, 2050.00,  '2027-03-01', 'Tarjeta de débito'),
+(11, 1850.50,  '2027-08-01', 'Tarjeta de crédito'),
+(12, 1950.50,  '2028-03-01', 'Efectivo'),
+(13, 1750.00,  '2028-08-01', 'Tarjeta de crédito'),
+(14, 1050.00,  '2029-03-01', 'Transferencia bancaria'),
+(15, 1800.00, '2029-08-01', 'Efectivo'),
+(16, 1500.00, '2030-03-01', 'Tarjeta de débito'),
+(17, 2500.50, '2030-08-01', 'Tarjeta de crédito'),
+(18, 2600.00, '2031-03-01', 'Tarjeta de crédito'),
+(19, 1500.50, '2031-08-01', 'Transferencia bancaria'),
+(20, 1900.50, '2032-03-01', 'Efectivo'),
+
+
+INSERT INTO detalle_matricula_pago (id_matricula, id_pago, monto_pagado, fecha_pago) VALUES
+(1,  1,  3000.00,   '2023-02-27'),
+(2,  2,  1850.00,   '2023-07-26'),
+(3,  3,  1600.00,   '2024-03-25'),
+(4,  4,  1750.50,   '2024-07-29'),
+(5,  5,  1900.00,   '2025-02-30'),
+(6,  6,  1550.00,   '2025-07-29'),
+(7,  7,  2250.50,   '2026-02-26'),
+(8,  8,  1800.00,   '2026-07-24'),
+(9,  9,  2000.00,   '2027-02-28'),
+(10, 10, 2050.00, '2027-07-20'),
+(11, 11, 1850.50, '2028-02-21'),
+(12, 12, 1950.50, '2028-07-22'),
+(13, 13, 1750.00, '2029-02-25'),
+(14, 14, 1050.00, '2029-07-26'),
+(15, 15, 1800.00, '2030-02-22'),
+(16, 16, 1500.00, '2030-07-25'),
+(17, 17, 2500.50, '2031-02-25'),
+(18, 18, 2600.00, '2031-07-27'),
+(19, 19, 1500.50, '2032-02-25'),
+(20, 20, 1900.50, '2032-07-22');
+
+
