@@ -504,3 +504,144 @@ INSERT INTO detalle_matricula_pago (id_matricula, id_pago, monto_pagado, fecha_p
 (19, 19, 1500.50, '2032-02-25'),
 (20, 20, 1900.50, '2032-07-22');
 
+
+-- Procedimientos almacenados
+
+-- Departamento
+CREATE PROCEDURE InsertarDepartamento
+    @Nombre NVARCHAR(50)
+AS
+BEGIN
+    INSERT INTO departamento (nombre) VALUES (@Nombre);
+END;
+
+CREATE PROCEDURE ActualizarDepartamento
+    @IdDepartamento INT,
+    @Nombre NVARCHAR(50)
+AS
+BEGIN
+    UPDATE departamento 
+    SET nombre = @Nombre 
+    WHERE id_departamento = @IdDepartamento;
+END;
+
+-- Provincia
+CREATE PROCEDURE InsertarProvincia
+    @Nombre NVARCHAR(50),
+    @IdDepartamento INT
+AS
+BEGIN
+    INSERT INTO provincia (nombre, id_departamento) VALUES (@Nombre, @IdDepartamento);
+END;
+
+CREATE PROCEDURE ActualizarProvincia
+    @IdProvincia INT,
+    @Nombre NVARCHAR(50),
+    @IdDepartamento INT
+AS
+BEGIN
+    UPDATE provincia 
+    SET nombre = @Nombre, id_departamento = @IdDepartamento
+    WHERE id_provincia = @IdProvincia;
+END;
+
+-- Distrito
+CREATE PROCEDURE InsertarDistrito
+    @Nombre NVARCHAR(50),
+    @IdProvincia INT
+AS
+BEGIN
+    INSERT INTO distrito (nombre, id_provincia) VALUES (@Nombre, @IdProvincia);
+END;
+
+CREATE PROCEDURE ActualizarDistrito
+    @IdDistrito INT,
+    @Nombre NVARCHAR(50),
+    @IdProvincia INT
+AS
+BEGIN
+    UPDATE distrito 
+    SET nombre = @Nombre, id_provincia = @IdProvincia
+    WHERE id_distrito = @IdDistrito;
+END;
+
+-- Sede
+CREATE PROCEDURE InsertarSede
+    @Nombre NVARCHAR(100),
+    @Direccion NVARCHAR(200),
+    @IdDistrito INT
+AS
+BEGIN
+    INSERT INTO sede (nombre, direccion, id_distrito) VALUES (@Nombre, @Direccion, @IdDistrito);
+END;
+
+CREATE PROCEDURE ActualizarSede
+    @IdSede INT,
+    @Nombre NVARCHAR(100),
+    @Direccion NVARCHAR(200),
+    @IdDistrito INT
+AS
+BEGIN
+    UPDATE sede 
+    SET nombre = @Nombre, direccion = @Direccion, id_distrito = @IdDistrito
+    WHERE id_sede = @IdSede;
+END;
+
+-- Campus
+CREATE PROCEDURE InsertarCampus
+    @Nombre NVARCHAR(100),
+    @IdSede INT
+AS
+BEGIN
+    INSERT INTO campus (nombre, id_sede) VALUES (@Nombre, @IdSede);
+END;
+
+CREATE PROCEDURE ActualizarCampus
+    @IdCampus INT,
+    @Nombre NVARCHAR(100),
+    @IdSede INT
+AS
+BEGIN
+    UPDATE campus 
+    SET nombre = @Nombre, id_sede = @IdSede
+    WHERE id_campus = @IdCampus;
+END;
+
+-- Facultad
+CREATE PROCEDURE InsertarFacultad
+    @Nombre NVARCHAR(100)
+AS
+BEGIN
+    INSERT INTO facultad (nombre) VALUES (@Nombre);
+END;
+
+CREATE PROCEDURE ActualizarFacultad
+    @IdFacultad INT,
+    @Nombre NVARCHAR(100)
+AS
+BEGIN
+    UPDATE facultad 
+    SET nombre = @Nombre 
+    WHERE id_facultad = @IdFacultad;
+END;
+
+-- Carrera
+CREATE PROCEDURE InsertarCarrera
+    @Nombre NVARCHAR(100),
+    @IdFacultad INT
+AS
+BEGIN
+    INSERT INTO carrera (nombre, id_facultad) VALUES (@Nombre, @IdFacultad);
+END;
+
+CREATE PROCEDURE ActualizarCarrera
+    @IdCarrera INT,
+    @Nombre NVARCHAR(100),
+    @IdFacultad INT
+AS
+BEGIN
+    UPDATE carrera 
+    SET nombre = @Nombre, id_facultad = @IdFacultad
+    WHERE id_carrera = @IdCarrera;
+END;
+
