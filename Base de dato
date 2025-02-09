@@ -74,11 +74,12 @@ create table matricula (
 	id_distrito int not null,
 	id_carrera int not null,
 	id_campus int not null,
+	id_alumno int,
 	foreign key (id_semestre) references semestre(id_semestre),
 	foreign key (id_distrito) references distrito(id_distrito),
 	foreign key (id_carrera) references carrera(id_carrera),
 	foreign key (id_campus) references campus(id_campus),
-	foreign key (id_matricula) references alumno(id_alumno)
+	foreign key (id_alumno) references alumno(id_alumno)
 );
 
 create table grupo (
@@ -222,12 +223,7 @@ VALUES
     ('2030-I', '2030-03-01', '2030-07-15'), ('2030-II', '2030-08-01', '2030-12-15'),
     ('2031-I', '2031-03-01', '2031-07-15'), ('2031-II', '2031-08-01', '2031-12-15'),
     ('2032-I', '2032-03-01', '2032-07-15');
-
-
-
-
-
-
+ 
 INSERT INTO alumno (nombre, apellido, dni, correo, telefono, id_distrito, id_carrera, id_campus)
 VALUES 
 ('Juan', 'Perez', '12345678', 'juan.perez@email.com', '987654321', 1, 1, 1),
@@ -250,11 +246,30 @@ VALUES
 ('Fernando', 'Ortega', '66778899', 'fernando.ortega@email.com', '987654338', 18, 18, 18),
 ('Patricia', 'Rojas', '77889900', 'patricia.rojas@email.com', '987654339', 19, 19, 19),
 ('Hugo', 'Paredes', '88990011', 'hugo.paredes@email.com', '987654340', 20, 20, 20);
-
-
-
-
-
+ 
+INSERT INTO matricula (fecha_matricula ,vigencia, id_semestre,id_distrito, id_carrera, id_campus )
+VALUES 
+('2023-02-27', 'V', 1,  1,   1,  1), 
+('2023-07-26', 'V', 2,  2,   4,  2), 
+('2024-03-25', 'N', 3,  3,   6,  3), 
+('2024-07-29', 'V', 4,  4,   9,  4), 
+('2025-02-30', 'V', 5,  5,   20, 5), 
+('2025-07-29', 'V', 6,  6,   3,  6), 
+('2026-02-26', 'N', 7,  7,   19, 7), 
+('2026-07-24', 'V', 8,  8,   17, 8), 
+('2027-02-28', 'V', 9,  9,   9,  9), 
+('2027-07-20', 'V', 10, 10,  16, 10),
+('2028-02-21', 'V', 11, 11,  20, 11),
+('2028-07-22', 'N', 12, 12,  1,  12),
+('2029-02-25', 'V', 13, 13,  5,  13),
+('2029-07-26', 'V', 14, 14,  4,  14),
+('2030-02-22', 'N', 15, 15,  11, 15),
+('2030-07-25', 'V', 16, 16,  1,  16),
+('2031-02-25', 'V', 17, 17,  19, 17),
+('2031-07-27', 'N', 18, 18,  20, 18),
+('2032-02-25', 'V', 19, 19,  6,  19),
+('2032-07-22', 'V', 20, 20,  10, 20);
+ 
 INSERT INTO grupo (denominacion, matriculados)
 VALUES 
 ('Grupo A', 30),
@@ -279,9 +294,30 @@ VALUES
 ('Grupo T', 27);
 
 
+INSERT INTO detalle_matricula (matricula_id, grupo_id, nota)
+VALUES
+(1, 1, 20),
+(2, 2, 18),
+(3, 3, 14),
+(4, 4, 16),
+(5, 5, 14),
+(6, 6, 19),
+(7, 7, 10),
+(8, 8, 17),
+(9, 9, 13),
+(10, 10, 18),
+(11, 11, 11),
+(12, 12, 15),
+(13, 13, 14),
+(14, 14, 9),
+(15, 15, 16),
+(16, 16, 13),
+(17, 17, 15),
+(18, 18, 12),
+(19, 19, 7),
+(20, 20, 5);
 
-
-
+ 
 
 INSERT INTO curso (nombre, descripcion)
 VALUES 
@@ -306,3 +342,72 @@ VALUES
 ('Música', 'Historia y teoría musical'),
 ('Biología', 'Estructura celular y genética');
 
+INSERT INTO docente (nombre, apellido, dni, correo, telefono)  
+VALUES  
+('Carlos', 'García', '16987478', 'carlos_garcia@gmail.com', '987234321'),  
+('María', 'López', '87654321', 'maria_lopez@gmail.com', '997873222'),  
+('Javier', 'Fernández', '85634792', 'javier_fernandez@gmail.com', '99816533'),  
+('Carla', 'Martínez', '98232481', 'carla_martinez@gmail.com', '909720324'),  
+('Pedro', 'Torres', '16257298', 'pedro_torres@gmail.com', '901983287'),  
+('Sofía', 'Ramírez', '93871294', 'sofia_ramirez@gmail.com', '923452356'),  
+('Luis', 'Ortega', '16139183', 'luis_ortega@gmail.com', '958268451'),  
+('Gabriela', 'Silva', '62346649', 'gabriela_silva@gmail.com', '975252342'),  
+('Diego', 'Castro', '76489823', 'diego_castro@gmail.com', '973456345'),  
+('Patricia', 'Rojas', '88990011', 'patricia_rojas@gmail.com', '934634556'),  
+('Hugo', 'Mendoza', '90319422', 'hugo_mendoza@gmail.com', '947822102'),  
+('Carolina', 'Chávez', '81223832', 'carolina_chavez@gmail.com', '987235645'),  
+('Fernando', 'Vega', '13194343', 'fernando_vega@gmail.com', '987125978'),  
+('Valeria', 'Morales', '22334455', 'valeria_morales@gmail.com', '951298423'),  
+('Ricardo', 'Salazar', '33445566', 'ricardo_salazar@gmail.com', '998374872'),  
+('Elena', 'Alvarez', '18738383', 'elena_alvarez@gmail.com', '989354246'),  
+('Roberto', 'Paredes', '57241722', 'roberto_paredes@gmail.com', '983487337'),  
+('Lucía', 'Gómez', '22317812', 'lucia_gomez@gmail.com', '934290338'),  
+('Oscar', 'Díaz', '91842340', 'oscar_diaz@gmail.com', '902973433'),  
+('Carmen', 'Reyes', '94223223', 'carmen_reyes@gmail.com', '923423420');  
+
+
+INSERT INTO detalle_grupo_curso (id_grupo, id_curso)  
+VALUES  
+(1, 1), 
+(2, 2), 
+(3, 3), 
+(4, 4), 
+(5, 5),  
+(6, 6), 
+(7, 7), 
+(8, 8), 
+(9, 9), 
+(10, 10),  
+(11, 11), 
+(12, 12), 
+(13, 13), 
+(14, 14), 
+(15, 15),  
+(16, 16), 
+(17, 17), 
+(18, 18), 
+(19, 19), 
+(20, 20);  
+ 
+INSERT INTO detalle_docente_curso (id_docente, id_curso) 
+VALUES
+(1, 1), 
+(2, 2), 
+(3, 3), 
+(4, 4), 
+(5, 5),  
+(6, 6), 
+(7, 7), 
+(8, 8), 
+(9, 9), 
+(10, 10),  
+(11, 11), 
+(12, 12), 
+(13, 13), 
+(14, 14), 
+(15, 15),  
+(16, 16), 
+(17, 17), 
+(18, 18), 
+(19, 19), 
+(20, 20); 
