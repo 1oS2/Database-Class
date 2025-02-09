@@ -126,3 +126,81 @@ create table detalle_docente_curso (
 	foreign key (id_docente) references docente(id_docente),
 	foreign key (id_curso) references curso(id_curso)
 );
+
+
+
+	--INSERT INTO--
+
+
+
+/*INSERT INTO departamento (nombre)
+VALUES  ('Lima'),
+    ('Piura'),
+    ('Pasco'),
+    ('Moquegua'),
+    ('Madre de Dios'),
+    ('Loreto'),
+    ('Lambayeque'),
+    ('La Libertad'),
+    ('Junin'),
+    ('Ica'),
+    ('Huanuco'),
+    ('Huancavelica'),
+    ('Cusco'),
+    ('Callao'),
+    ('Cajamarca'),
+    ('Ayacucho'),
+    ('Arequipa'),
+    ('Apurimac'),
+    ('Ancash'),
+    ('Amazonas');*/
+-------------------------------------------------------------------------------
+/*INSERT INTO provincia (nombre, id_departamento)
+VALUES 
+    ('Chiclayo', 1),
+    ('Trujillo', 2),
+    ('Huamanga', 3),
+    ('Maynas', 4),
+    ('Cañete', 5),
+    ('Pisco', 6),
+    ('Huaraz', 7),
+    ('Cajamarca', 8),
+    ('Cusco', 9),
+    ('Huancayo', 10),
+    ('Chachapoyas', 11),
+    ('Sullana', 12),
+    ('Tarma', 13),
+    ('Moquegua', 14),
+    ('Tumbes', 15),
+    ('Jaen', 16),
+    ('Bagua', 17),
+    ('Ilo', 18),
+    ('Puerto Maldonado', 19),
+    ('Puno', 20);*/
+
+------------------------------------------------------------------
+
+INSERT INTO distrito (nombre, id_provincia) 
+VALUES 
+    ('Cercado de Lima', 2),
+    ('La Esperanza', 3),
+    ('San Juan Bautista', 4),
+    ('Punchana', 5),
+    ('San Vicente de Cañete', 6),
+    ('Paracas', 7),
+    ('Independencia', 8),
+    ('Baños del Inca', 9),
+    ('San Sebastián',10),
+    ('El Tambo', 11),
+    ('Levanto', 12),
+    ('Bellavista', 13),
+    ('Acobamba', 14),
+    ('Torata', 15),
+    ('Corrales', 16),
+    ('Las Pirias', 17),
+    ('Copallín', 18),
+    ('Pacocha', 19),
+    ('Tambopata', 20),
+    ('San Román', 21);
+
+
