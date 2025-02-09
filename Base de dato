@@ -1,3 +1,22 @@
+DROP TABLE IF EXISTS detalle_docente_curso;
+DROP TABLE IF EXISTS detalle_grupo_curso;
+DROP TABLE IF EXISTS detalle_matricula;
+DROP TABLE IF EXISTS detalle_matricula_pago;
+DROP TABLE IF EXISTS pago;
+DROP TABLE IF EXISTS grupo;
+DROP TABLE IF EXISTS docente;
+DROP TABLE IF EXISTS curso;
+DROP TABLE IF EXISTS matricula;
+DROP TABLE IF EXISTS alumno;
+DROP TABLE IF EXISTS semestre;
+DROP TABLE IF EXISTS carrera;
+DROP TABLE IF EXISTS facultad;
+DROP TABLE IF EXISTS campus;
+DROP TABLE IF EXISTS sede;
+DROP TABLE IF EXISTS distrito;
+DROP TABLE IF EXISTS provincia;
+DROP TABLE IF EXISTS departamento;
+
 create table departamento (
 	id_departamento int primary key identity(1,1),
 	nombre nvarchar(50) not null
@@ -97,7 +116,7 @@ CREATE TABLE detalle_matricula_pago (
     monto_pagado DECIMAL(10,2) not null,
     fecha_pago DATE not null,
     foreign key(id_matricula) REFERENCES matricula(id_matricula),
-    foreign key(id_pago) REFERENCES Pagos(id_pago)
+    foreign key(id_pago) REFERENCES pago(id_pago)
 );
 
 
@@ -441,7 +460,7 @@ VALUES
 (20, 20); 
 
 INSERT INTO pago (id_estudiante, monto, fecha_limite, metodo_pago) VALUES
-(1,  3000.00, '2032-07-22', 'Tarjeta de débito');
+(1,  3000.00, '2032-07-22', 'Tarjeta de débito'),
 (2,  1850.00,   '2023-03-01', 'Tarjeta de crédito'),
 (3,  1600.00,  '2023-08-01', 'Transferencia bancaria'),
 (4,  1750.50,  '2024-03-01', 'Efectivo'),
@@ -460,7 +479,7 @@ INSERT INTO pago (id_estudiante, monto, fecha_limite, metodo_pago) VALUES
 (17, 2500.50, '2030-08-01', 'Tarjeta de crédito'),
 (18, 2600.00, '2031-03-01', 'Tarjeta de crédito'),
 (19, 1500.50, '2031-08-01', 'Transferencia bancaria'),
-(20, 1900.50, '2032-03-01', 'Efectivo'),
+(20, 1900.50, '2032-03-01', 'Efectivo');
 
 
 INSERT INTO detalle_matricula_pago (id_matricula, id_pago, monto_pagado, fecha_pago) VALUES
@@ -484,5 +503,4 @@ INSERT INTO detalle_matricula_pago (id_matricula, id_pago, monto_pagado, fecha_p
 (18, 18, 2600.00, '2031-07-27'),
 (19, 19, 1500.50, '2032-02-25'),
 (20, 20, 1900.50, '2032-07-22');
-
 
