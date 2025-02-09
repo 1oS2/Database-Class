@@ -128,7 +128,7 @@ create table detalle_docente_curso (
 );
 
 ----------------------------------------------------------------------------------------
--- Insertar 20 departamentos
+
 INSERT INTO departamento (nombre) 
 VALUES 
     ('Amazonas'), ('Áncash'), ('Apurímac'), ('Arequipa'), ('Ayacucho'), 
@@ -136,7 +136,9 @@ VALUES
     ('Ica'), ('Junín'), ('La Libertad'), ('Lambayeque'), ('Lima'),
     ('Loreto'), ('Madre de Dios'), ('Moquegua'), ('Pasco'), ('Piura');
 
--- Insertar 20 provincias
+
+
+
 INSERT INTO provincia (nombre, id_departamento) 
 VALUES 
     ('Chachapoyas', 1), ('Huaraz', 2), ('Abancay', 3), ('Arequipa', 4), ('Huamanga', 5),
@@ -144,7 +146,9 @@ VALUES
     ('Ica', 11), ('Huancayo', 12), ('Trujillo', 13), ('Chiclayo', 14), ('Huaral', 15),
     ('Maynas', 16), ('Tambopata', 17), ('Mariscal Nieto', 18), ('Pasco', 19), ('Sullana', 20);
 
--- Insertar 20 distritos
+
+
+
 INSERT INTO distrito (nombre, id_provincia) 
 VALUES 
     ('Levanto', 1), ('Independencia', 2), ('Curahuasi', 3), ('Yanahuara', 4), ('San Juan Bautista', 5),
@@ -152,7 +156,10 @@ VALUES
     ('Parcona', 11), ('El Tambo', 12), ('La Esperanza', 13), ('José Leonardo Ortiz', 14), ('Chancay', 15),
     ('Punchana', 16), ('Laberinto', 17), ('Torata', 18), ('Yanacancha', 19), ('Bellavista', 20);
 
--- Insertar 20 sedes
+
+
+
+
 INSERT INTO sede (nombre, direccion, id_distrito) 
 VALUES 
     ('Sede Amazonas', 'Av. Chachapoyas 123', 1), ('Sede Ancash', 'Jr. Huaraz 456', 2), 
@@ -166,7 +173,10 @@ VALUES
     ('Sede Madre de Dios', 'Jr. Laberinto 222', 17), ('Sede Moquegua', 'Jr. Torata 111', 18),
     ('Sede Pasco', 'Av. Yanacancha 101', 19), ('Sede Piura', 'Av. Bellavista 202', 20);
 
--- Insertar 20 campus
+
+
+
+
 INSERT INTO campus (nombre, id_sede) 
 VALUES 
     ('Campus 1', 1), ('Campus 2', 2), ('Campus 3', 3), ('Campus 4', 4), ('Campus 5', 5),
@@ -174,7 +184,10 @@ VALUES
     ('Campus 11', 11), ('Campus 12', 12), ('Campus 13', 13), ('Campus 14', 14), ('Campus 15', 15),
     ('Campus 16', 16), ('Campus 17', 17), ('Campus 18', 18), ('Campus 19', 19), ('Campus 20', 20);
 
--- Insertar 20 facultades
+
+
+
+
 INSERT INTO facultad (nombre) 
 VALUES 
     ('Ingeniería'), ('Medicina'), ('Derecho'), ('Administración'), ('Economía'),
@@ -182,7 +195,10 @@ VALUES
     ('Veterinaria'), ('Arte'), ('Filosofía'), ('Matemáticas'), ('Física'),
     ('Biología'), ('Química'), ('Deportes'), ('Música'), ('Idiomas');
 
--- Insertar 20 carreras
+
+
+
+
 INSERT INTO carrera (nombre, id_facultad) 
 VALUES 
     ('Ingeniería Civil', 1), ('Medicina Humana', 2), ('Derecho Penal', 3), ('Administración de Empresas', 4), ('Economía y Finanzas', 5),
@@ -190,7 +206,10 @@ VALUES
     ('Veterinaria', 11), ('Bellas Artes', 12), ('Filosofía y Letras', 13), ('Matemáticas Aplicadas', 14), ('Física Nuclear', 15),
     ('Biotecnología', 16), ('Química Industrial', 17), ('Entrenamiento Deportivo', 18), ('Música Clásica', 19), ('Traducción e Interpretación', 20);
 
--- Insertar 20 semestres
+
+
+
+
 INSERT INTO semestre (denominacion, fecha_inicio, fecha_fin) 
 VALUES 
     ('2023-I', '2023-03-01', '2023-07-15'), ('2023-II', '2023-08-01', '2023-12-15'), 
@@ -204,7 +223,11 @@ VALUES
     ('2031-I', '2031-03-01', '2031-07-15'), ('2031-II', '2031-08-01', '2031-12-15'),
     ('2032-I', '2032-03-01', '2032-07-15');
 
--- Insertar 20 registros en la tabla alumno
+
+
+
+
+
 INSERT INTO alumno (nombre, apellido, dni, correo, telefono, id_distrito, id_carrera, id_campus)
 VALUES 
 ('Juan', 'Perez', '12345678', 'juan.perez@email.com', '987654321', 1, 1, 1),
@@ -228,7 +251,10 @@ VALUES
 ('Patricia', 'Rojas', '77889900', 'patricia.rojas@email.com', '987654339', 19, 19, 19),
 ('Hugo', 'Paredes', '88990011', 'hugo.paredes@email.com', '987654340', 20, 20, 20);
 
--- Insertar 20 registros en la tabla grupo
+
+
+
+
 INSERT INTO grupo (denominacion, matriculados)
 VALUES 
 ('Grupo A', 30),
@@ -252,7 +278,11 @@ VALUES
 ('Grupo S', 31),
 ('Grupo T', 27);
 
--- Insertar 20 registros en la tabla curso
+
+
+
+
+
 INSERT INTO curso (nombre, descripcion)
 VALUES 
 ('Matemáticas', 'Cálculo diferencial e integral'),
