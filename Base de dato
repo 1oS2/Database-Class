@@ -126,3 +126,153 @@ create table detalle_docente_curso (
 	foreign key (id_docente) references docente(id_docente),
 	foreign key (id_curso) references curso(id_curso)
 );
+
+----------------------------------------------------------------------------------------
+-- Insertar 20 departamentos
+INSERT INTO departamento (nombre) 
+VALUES 
+    ('Amazonas'), ('Áncash'), ('Apurímac'), ('Arequipa'), ('Ayacucho'), 
+    ('Cajamarca'), ('Callao'), ('Cusco'), ('Huancavelica'), ('Huánuco'),
+    ('Ica'), ('Junín'), ('La Libertad'), ('Lambayeque'), ('Lima'),
+    ('Loreto'), ('Madre de Dios'), ('Moquegua'), ('Pasco'), ('Piura');
+
+-- Insertar 20 provincias
+INSERT INTO provincia (nombre, id_departamento) 
+VALUES 
+    ('Chachapoyas', 1), ('Huaraz', 2), ('Abancay', 3), ('Arequipa', 4), ('Huamanga', 5),
+    ('Cajamarca', 6), ('Callao', 7), ('Cusco', 8), ('Huancavelica', 9), ('Huánuco', 10),
+    ('Ica', 11), ('Huancayo', 12), ('Trujillo', 13), ('Chiclayo', 14), ('Huaral', 15),
+    ('Maynas', 16), ('Tambopata', 17), ('Mariscal Nieto', 18), ('Pasco', 19), ('Sullana', 20);
+
+-- Insertar 20 distritos
+INSERT INTO distrito (nombre, id_provincia) 
+VALUES 
+    ('Levanto', 1), ('Independencia', 2), ('Curahuasi', 3), ('Yanahuara', 4), ('San Juan Bautista', 5),
+    ('Baños del Inca', 6), ('Bellavista', 7), ('San Sebastián', 8), ('Acobamba', 9), ('Pillco Marca', 10),
+    ('Parcona', 11), ('El Tambo', 12), ('La Esperanza', 13), ('José Leonardo Ortiz', 14), ('Chancay', 15),
+    ('Punchana', 16), ('Laberinto', 17), ('Torata', 18), ('Yanacancha', 19), ('Bellavista', 20);
+
+-- Insertar 20 sedes
+INSERT INTO sede (nombre, direccion, id_distrito) 
+VALUES 
+    ('Sede Amazonas', 'Av. Chachapoyas 123', 1), ('Sede Ancash', 'Jr. Huaraz 456', 2), 
+    ('Sede Apurímac', 'Calle Curahuasi 789', 3), ('Sede Arequipa', 'Av. Yanahuara 321', 4),
+    ('Sede Ayacucho', 'Jr. San Juan 147', 5), ('Sede Cajamarca', 'Av. Baños del Inca 234', 6),
+    ('Sede Callao', 'Plaza Bellavista 555', 7), ('Sede Cusco', 'Jr. San Sebastián 333', 8),
+    ('Sede Huancavelica', 'Calle Acobamba 222', 9), ('Sede Huánuco', 'Av. Pillco Marca 999', 10),
+    ('Sede Ica', 'Jr. Parcona 888', 11), ('Sede Junín', 'Av. El Tambo 777', 12),
+    ('Sede La Libertad', 'Jr. La Esperanza 666', 13), ('Sede Lambayeque', 'Calle Ortiz 555', 14),
+    ('Sede Lima', 'Av. Chancay 444', 15), ('Sede Loreto', 'Av. Punchana 333', 16),
+    ('Sede Madre de Dios', 'Jr. Laberinto 222', 17), ('Sede Moquegua', 'Jr. Torata 111', 18),
+    ('Sede Pasco', 'Av. Yanacancha 101', 19), ('Sede Piura', 'Av. Bellavista 202', 20);
+
+-- Insertar 20 campus
+INSERT INTO campus (nombre, id_sede) 
+VALUES 
+    ('Campus 1', 1), ('Campus 2', 2), ('Campus 3', 3), ('Campus 4', 4), ('Campus 5', 5),
+    ('Campus 6', 6), ('Campus 7', 7), ('Campus 8', 8), ('Campus 9', 9), ('Campus 10', 10),
+    ('Campus 11', 11), ('Campus 12', 12), ('Campus 13', 13), ('Campus 14', 14), ('Campus 15', 15),
+    ('Campus 16', 16), ('Campus 17', 17), ('Campus 18', 18), ('Campus 19', 19), ('Campus 20', 20);
+
+-- Insertar 20 facultades
+INSERT INTO facultad (nombre) 
+VALUES 
+    ('Ingeniería'), ('Medicina'), ('Derecho'), ('Administración'), ('Economía'),
+    ('Arquitectura'), ('Psicología'), ('Educación'), ('Comunicación'), ('Ciencias Sociales'),
+    ('Veterinaria'), ('Arte'), ('Filosofía'), ('Matemáticas'), ('Física'),
+    ('Biología'), ('Química'), ('Deportes'), ('Música'), ('Idiomas');
+
+-- Insertar 20 carreras
+INSERT INTO carrera (nombre, id_facultad) 
+VALUES 
+    ('Ingeniería Civil', 1), ('Medicina Humana', 2), ('Derecho Penal', 3), ('Administración de Empresas', 4), ('Economía y Finanzas', 5),
+    ('Arquitectura y Urbanismo', 6), ('Psicología Clínica', 7), ('Educación Primaria', 8), ('Periodismo', 9), ('Trabajo Social', 10),
+    ('Veterinaria', 11), ('Bellas Artes', 12), ('Filosofía y Letras', 13), ('Matemáticas Aplicadas', 14), ('Física Nuclear', 15),
+    ('Biotecnología', 16), ('Química Industrial', 17), ('Entrenamiento Deportivo', 18), ('Música Clásica', 19), ('Traducción e Interpretación', 20);
+
+-- Insertar 20 semestres
+INSERT INTO semestre (denominacion, fecha_inicio, fecha_fin) 
+VALUES 
+    ('2023-I', '2023-03-01', '2023-07-15'), ('2023-II', '2023-08-01', '2023-12-15'), 
+    ('2024-I', '2024-03-01', '2024-07-15'), ('2024-II', '2024-08-01', '2024-12-15'),
+    ('2025-I', '2025-03-01', '2025-07-15'), ('2025-II', '2025-08-01', '2025-12-15'),
+    ('2026-I', '2026-03-01', '2026-07-15'), ('2026-II', '2026-08-01', '2026-12-15'),
+    ('2027-I', '2027-03-01', '2027-07-15'), ('2027-II', '2027-08-01', '2027-12-15'),
+    ('2028-I', '2028-03-01', '2028-07-15'), ('2028-II', '2028-08-01', '2028-12-15'),
+    ('2029-I', '2029-03-01', '2029-07-15'), ('2029-II', '2029-08-01', '2029-12-15'),
+    ('2030-I', '2030-03-01', '2030-07-15'), ('2030-II', '2030-08-01', '2030-12-15'),
+    ('2031-I', '2031-03-01', '2031-07-15'), ('2031-II', '2031-08-01', '2031-12-15'),
+    ('2032-I', '2032-03-01', '2032-07-15');
+
+-- Insertar 20 registros en la tabla alumno
+INSERT INTO alumno (nombre, apellido, dni, correo, telefono, id_distrito, id_carrera, id_campus)
+VALUES 
+('Juan', 'Perez', '12345678', 'juan.perez@email.com', '987654321', 1, 1, 1),
+('Maria', 'Lopez', '87654321', 'maria.lopez@email.com', '987654322', 2, 2, 2),
+('Carlos', 'Gomez', '11223344', 'carlos.gomez@email.com', '987654323', 3, 3, 3),
+('Ana', 'Diaz', '22334455', 'ana.diaz@email.com', '987654324', 4, 4, 4),
+('Pedro', 'Torres', '33445566', 'pedro.torres@email.com', '987654325', 5, 5, 5),
+('Luis', 'Martinez', '44556677', 'luis.martinez@email.com', '987654326', 6, 6, 6),
+('Sofia', 'Ramirez', '55667788', 'sofia.ramirez@email.com', '987654327', 7, 7, 7),
+('Diego', 'Fernandez', '66778899', 'diego.fernandez@email.com', '987654328', 8, 8, 8),
+('Lucia', 'Alvarez', '77889900', 'lucia.alvarez@email.com', '987654329', 9, 9, 9),
+('Jorge', 'Castro', '88990011', 'jorge.castro@email.com', '987654330', 10, 10, 10),
+('Carmen', 'Reyes', '99001122', 'carmen.reyes@email.com', '987654331', 11, 11, 11),
+('Ricardo', 'Silva', '00112233', 'ricardo.silva@email.com', '987654332', 12, 12, 12),
+('Gabriela', 'Mendoza', '11223344', 'gabriela.mendoza@email.com', '987654333', 13, 13, 13),
+('Oscar', 'Salazar', '22334455', 'oscar.salazar@email.com', '987654334', 14, 14, 14),
+('Valeria', 'Morales', '33445566', 'valeria.morales@email.com', '987654335', 15, 15, 15),
+('Roberto', 'Chavez', '44556677', 'roberto.chavez@email.com', '987654336', 16, 16, 16),
+('Elena', 'Vega', '55667788', 'elena.vega@email.com', '987654337', 17, 17, 17),
+('Fernando', 'Ortega', '66778899', 'fernando.ortega@email.com', '987654338', 18, 18, 18),
+('Patricia', 'Rojas', '77889900', 'patricia.rojas@email.com', '987654339', 19, 19, 19),
+('Hugo', 'Paredes', '88990011', 'hugo.paredes@email.com', '987654340', 20, 20, 20);
+
+-- Insertar 20 registros en la tabla grupo
+INSERT INTO grupo (denominacion, matriculados)
+VALUES 
+('Grupo A', 30),
+('Grupo B', 28),
+('Grupo C', 32),
+('Grupo D', 27),
+('Grupo E', 35),
+('Grupo F', 29),
+('Grupo G', 31),
+('Grupo H', 33),
+('Grupo I', 26),
+('Grupo J', 34),
+('Grupo K', 25),
+('Grupo L', 36),
+('Grupo M', 23),
+('Grupo N', 30),
+('Grupo O', 32),
+('Grupo P', 28),
+('Grupo Q', 33),
+('Grupo R', 29),
+('Grupo S', 31),
+('Grupo T', 27);
+
+-- Insertar 20 registros en la tabla curso
+INSERT INTO curso (nombre, descripcion)
+VALUES 
+('Matemáticas', 'Cálculo diferencial e integral'),
+('Física', 'Conceptos básicos de mecánica'),
+('Química', 'Reacciones y compuestos'),
+('Historia', 'Historia mundial'),
+('Lengua', 'Gramática y redacción'),
+('Programación', 'Fundamentos de programación en C++'),
+('Bases de Datos', 'Diseño y administración de bases de datos'),
+('Redes', 'Conceptos de redes y protocolos'),
+('Sistemas Operativos', 'Administración y uso de sistemas operativos'),
+('Estructuras de Datos', 'Árboles, listas y grafos'),
+('Administración', 'Gestión empresarial'),
+('Contabilidad', 'Estados financieros'),
+('Psicología', 'Introducción a la psicología'),
+('Marketing', 'Estrategias de mercado'),
+('Economía', 'Macroeconomía y microeconomía'),
+('Diseño Gráfico', 'Herramientas y técnicas de diseño'),
+('Derecho', 'Introducción al derecho civil'),
+('Arquitectura', 'Fundamentos de arquitectura'),
+('Música', 'Historia y teoría musical'),
+('Biología', 'Estructura celular y genética');
+
