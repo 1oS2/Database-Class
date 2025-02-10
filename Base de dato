@@ -17,6 +17,60 @@ DROP TABLE IF EXISTS distrito;
 DROP TABLE IF EXISTS provincia;
 DROP TABLE IF EXISTS departamento;
 
+DROP PROCEDURE IF EXISTS InsertarDepartamento;
+DROP PROCEDURE IF EXISTS ActualizarDepartamento;
+
+DROP PROCEDURE IF EXISTS InsertarProvincia;
+DROP PROCEDURE IF EXISTS ActualizarProvincia;
+
+DROP PROCEDURE IF EXISTS InsertarDistrito;
+DROP PROCEDURE IF EXISTS ActualizarDistrito;
+
+DROP PROCEDURE IF EXISTS InsertarSede;
+DROP PROCEDURE IF EXISTS ActualizarSede;
+
+DROP PROCEDURE IF EXISTS InsertarCampus;
+DROP PROCEDURE IF EXISTS ActualizarCampus;
+
+DROP PROCEDURE IF EXISTS InsertarFacultad;
+DROP PROCEDURE IF EXISTS ActualizarFacultad;
+
+DROP PROCEDURE IF EXISTS InsertarCarrera;
+DROP PROCEDURE IF EXISTS ActualizarCarrera;
+
+DROP PROCEDURE IF EXISTS InsertarSemestre;
+DROP PROCEDURE IF EXISTS ActualizarSemestre;
+
+DROP PROCEDURE IF EXISTS InsertarAlumno;
+DROP PROCEDURE IF EXISTS ActualizarAlumno;
+
+DROP PROCEDURE IF EXISTS InsertarMatricula;
+DROP PROCEDURE IF EXISTS ActualizarMatricula;
+
+DROP PROCEDURE IF EXISTS InsertarPago;
+DROP PROCEDURE IF EXISTS ActualizarPago;
+
+DROP PROCEDURE IF EXISTS InsertarDetalleMatriculaPago;
+DROP PROCEDURE IF EXISTS ActualizarDetalleMatriculaPago;
+
+DROP PROCEDURE IF EXISTS InsertarGrupo;
+DROP PROCEDURE IF EXISTS ActualizarGrupo;
+
+DROP PROCEDURE IF EXISTS InsertarDetalleMatricula;
+DROP PROCEDURE IF EXISTS ActualizarDetalleMatricula;
+
+DROP PROCEDURE IF EXISTS InsertarCurso;
+DROP PROCEDURE IF EXISTS ActualizarCurso;
+
+DROP PROCEDURE IF EXISTS InsertarDetalleGrupoCurso;
+DROP PROCEDURE IF EXISTS EliminarDetalleGrupoCurso;
+
+DROP PROCEDURE IF EXISTS InsertarDocente;
+DROP PROCEDURE IF EXISTS ActualizarDocente;
+
+DROP PROCEDURE IF EXISTS InsertarDetalleDocenteCurso;
+DROP PROCEDURE IF EXISTS EliminarDetalleDocenteCurso;
+
 create table departamento (
 	id_departamento int primary key identity(1,1),
 	nombre nvarchar(50) not null
@@ -248,7 +302,6 @@ VALUES
 
 
 
-
 INSERT INTO semestre (denominacion, fecha_inicio, fecha_fin) 
 VALUES 
     ('2023-I',  '2023-03-01', '2023-07-15'), 
@@ -269,7 +322,8 @@ VALUES
 	('2030-II', '2030-08-01', '2030-12-15'),
     ('2031-I',  '2031-03-01', '2031-07-15'), 
 	('2031-II', '2031-08-01', '2031-12-15'),
-    ('2032-I',  '2032-03-01', '2032-07-15');
+    ('2032-I',  '2032-03-01', '2032-07-15'),
+	('2032-II', '2032-08-01', '2032-12-15');
  
 INSERT INTO alumno (nombre, apellido, dni, correo, telefono, id_distrito, id_carrera, id_campus)
 VALUES 
@@ -294,28 +348,28 @@ VALUES
 ('Patricia', 'Rojas', '77889900', 'patricia.rojas@email.com', '987654339', 19, 19, 19),
 ('Hugo', 'Paredes', '88990011', 'hugo.paredes@email.com', '987654340', 20, 20, 20);
  
-INSERT INTO matricula (fecha_matricula ,vigencia, id_semestre,id_distrito, id_carrera, id_campus )
+INSERT INTO matricula (fecha_matricula ,vigencia, id_semestre,id_distrito, id_carrera, id_campus,id_alumno )
 VALUES 
-('2023-02-27', 'V', 1,  1,   1,  1), 
-('2023-07-26', 'V', 2,  2,   4,  2), 
-('2024-03-25', 'N', 3,  3,   6,  3), 
-('2024-07-29', 'V', 4,  4,   9,  4), 
-('2025-02-30', 'V', 5,  5,   20, 5), 
-('2025-07-29', 'V', 6,  6,   3,  6), 
-('2026-02-26', 'N', 7,  7,   19, 7), 
-('2026-07-24', 'V', 8,  8,   17, 8), 
-('2027-02-28', 'V', 9,  9,   9,  9), 
-('2027-07-20', 'V', 10, 10,  16, 10),
-('2028-02-21', 'V', 11, 11,  20, 11),
-('2028-07-22', 'N', 12, 12,  1,  12),
-('2029-02-25', 'V', 13, 13,  5,  13),
-('2029-07-26', 'V', 14, 14,  4,  14),
-('2030-02-22', 'N', 15, 15,  11, 15),
-('2030-07-25', 'V', 16, 16,  1,  16),
-('2031-02-25', 'V', 17, 17,  19, 17),
-('2031-07-27', 'N', 18, 18,  20, 18),
-('2032-02-25', 'V', 19, 19,  6,  19),
-('2032-07-22', 'V', 20, 20,  10, 20);
+('2023-02-27', 'V', 1,  1,   1,  1,  1), 
+('2023-07-26', 'V', 2,  2,   4,  2,  2), 
+('2024-03-25', 'N', 3,  3,   6,  3,  3), 
+('2024-07-29', 'V', 4,  4,   9,  4,  4), 
+('2025-02-28', 'V', 5,  5,   20, 5,  5), 
+('2025-07-29', 'V', 6,  6,   3,  6,  6), 
+('2026-02-26', 'N', 7,  7,   19, 7,  7), 
+('2026-07-24', 'V', 8,  8,   17, 8,  8), 
+('2027-02-28', 'V', 9,  9,   9,  9,  9), 
+('2027-07-20', 'V', 10, 10,  16, 10, 10),
+('2028-02-21', 'V', 11, 11,  20, 11, 11),
+('2028-07-22', 'N', 12, 12,  1,  12, 12),
+('2029-02-25', 'V', 13, 13,  5,  13, 13),
+('2029-07-26', 'V', 14, 14,  4,  14, 14),
+('2030-02-22', 'N', 15, 15,  11, 15, 15),
+('2030-07-25', 'V', 16, 16,  1,  16, 16),
+('2031-02-25', 'V', 17, 17,  19, 17, 17),
+('2031-07-27', 'N', 18, 18,  20, 18, 18),
+('2032-02-25', 'V', 19, 19,  6,  19, 19),
+('2032-07-22', 'V', 20, 20,  10, 20, 20);
  
 INSERT INTO grupo (denominacion, matriculados)
 VALUES 
@@ -487,7 +541,7 @@ INSERT INTO detalle_matricula_pago (id_matricula, id_pago, monto_pagado, fecha_p
 (2,  2,  1850.00,   '2023-07-26'),
 (3,  3,  1600.00,   '2024-03-25'),
 (4,  4,  1750.50,   '2024-07-29'),
-(5,  5,  1900.00,   '2025-02-30'),
+(5,  5,  1900.00,   '2025-02-28'),
 (6,  6,  1550.00,   '2025-07-29'),
 (7,  7,  2250.50,   '2026-02-26'),
 (8,  8,  1800.00,   '2026-07-24'),
@@ -508,12 +562,14 @@ INSERT INTO detalle_matricula_pago (id_matricula, id_pago, monto_pagado, fecha_p
 -- Procedimientos almacenados
 
 -- Departamento
+GO
 CREATE PROCEDURE InsertarDepartamento
     @Nombre NVARCHAR(50)
 AS
 BEGIN
     INSERT INTO departamento (nombre) VALUES (@Nombre);
 END;
+GO
 
 CREATE PROCEDURE ActualizarDepartamento
     @IdDepartamento INT,
@@ -524,6 +580,7 @@ BEGIN
     SET nombre = @Nombre 
     WHERE id_departamento = @IdDepartamento;
 END;
+GO
 
 -- Provincia
 CREATE PROCEDURE InsertarProvincia
@@ -533,6 +590,7 @@ AS
 BEGIN
     INSERT INTO provincia (nombre, id_departamento) VALUES (@Nombre, @IdDepartamento);
 END;
+GO
 
 CREATE PROCEDURE ActualizarProvincia
     @IdProvincia INT,
@@ -544,6 +602,7 @@ BEGIN
     SET nombre = @Nombre, id_departamento = @IdDepartamento
     WHERE id_provincia = @IdProvincia;
 END;
+GO
 
 -- Distrito
 CREATE PROCEDURE InsertarDistrito
@@ -553,6 +612,7 @@ AS
 BEGIN
     INSERT INTO distrito (nombre, id_provincia) VALUES (@Nombre, @IdProvincia);
 END;
+GO
 
 CREATE PROCEDURE ActualizarDistrito
     @IdDistrito INT,
@@ -564,6 +624,7 @@ BEGIN
     SET nombre = @Nombre, id_provincia = @IdProvincia
     WHERE id_distrito = @IdDistrito;
 END;
+GO
 
 -- Sede
 CREATE PROCEDURE InsertarSede
@@ -574,6 +635,7 @@ AS
 BEGIN
     INSERT INTO sede (nombre, direccion, id_distrito) VALUES (@Nombre, @Direccion, @IdDistrito);
 END;
+GO
 
 CREATE PROCEDURE ActualizarSede
     @IdSede INT,
@@ -586,6 +648,7 @@ BEGIN
     SET nombre = @Nombre, direccion = @Direccion, id_distrito = @IdDistrito
     WHERE id_sede = @IdSede;
 END;
+GO
 
 -- Campus
 CREATE PROCEDURE InsertarCampus
@@ -595,6 +658,7 @@ AS
 BEGIN
     INSERT INTO campus (nombre, id_sede) VALUES (@Nombre, @IdSede);
 END;
+GO
 
 CREATE PROCEDURE ActualizarCampus
     @IdCampus INT,
@@ -606,6 +670,7 @@ BEGIN
     SET nombre = @Nombre, id_sede = @IdSede
     WHERE id_campus = @IdCampus;
 END;
+GO
 
 -- Facultad
 CREATE PROCEDURE InsertarFacultad
@@ -614,6 +679,7 @@ AS
 BEGIN
     INSERT INTO facultad (nombre) VALUES (@Nombre);
 END;
+GO
 
 CREATE PROCEDURE ActualizarFacultad
     @IdFacultad INT,
@@ -624,6 +690,7 @@ BEGIN
     SET nombre = @Nombre 
     WHERE id_facultad = @IdFacultad;
 END;
+GO
 
 -- Carrera
 CREATE PROCEDURE InsertarCarrera
@@ -633,6 +700,7 @@ AS
 BEGIN
     INSERT INTO carrera (nombre, id_facultad) VALUES (@Nombre, @IdFacultad);
 END;
+GO
 
 CREATE PROCEDURE ActualizarCarrera
     @IdCarrera INT,
@@ -644,4 +712,294 @@ BEGIN
     SET nombre = @Nombre, id_facultad = @IdFacultad
     WHERE id_carrera = @IdCarrera;
 END;
+GO
 
+-- Semestre
+CREATE PROCEDURE InsertarSemestre
+    @Denominacion NVARCHAR(50),
+    @FechaInicio DATE,
+    @FechaFin DATE
+AS
+BEGIN
+    INSERT INTO semestre (denominacion, fecha_inicio, fecha_fin)
+    VALUES (@Denominacion, @FechaInicio, @FechaFin);
+END;
+GO
+
+CREATE PROCEDURE ActualizarSemestre
+    @IdSemestre INT,
+    @Denominacion NVARCHAR(50),
+    @FechaInicio DATE,
+    @FechaFin DATE
+AS
+BEGIN
+    UPDATE semestre 
+    SET denominacion = @Denominacion, fecha_inicio = @FechaInicio, fecha_fin = @FechaFin
+    WHERE id_semestre = @IdSemestre;
+END;
+GO
+
+-- Alumno
+CREATE PROCEDURE InsertarAlumno
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(50),
+    @DNI CHAR(8),
+    @Correo NVARCHAR(50),
+    @Telefono NVARCHAR(9),
+    @IdDistrito INT,
+    @IdCarrera INT,
+    @IdCampus INT
+AS
+BEGIN
+    INSERT INTO alumno (nombre, apellido, dni, correo, telefono, id_distrito, id_carrera, id_campus)
+    VALUES (@Nombre, @Apellido, @DNI, @Correo, @Telefono, @IdDistrito, @IdCarrera, @IdCampus);
+END;
+GO
+
+CREATE PROCEDURE ActualizarAlumno
+    @IdAlumno INT,
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(50),
+    @DNI CHAR(8),
+    @Correo NVARCHAR(50),
+    @Telefono NVARCHAR(9),
+    @IdDistrito INT,
+    @IdCarrera INT,
+    @IdCampus INT
+AS
+BEGIN
+    UPDATE alumno
+    SET nombre = @Nombre, apellido = @Apellido, dni = @DNI, correo = @Correo, telefono = @Telefono,
+        id_distrito = @IdDistrito, id_carrera = @IdCarrera, id_campus = @IdCampus
+    WHERE id_alumno = @IdAlumno;
+END;
+GO
+
+-- Matricula
+CREATE PROCEDURE InsertarMatricula
+    @FechaMatricula DATE,
+    @Vigencia CHAR(1),
+    @IdSemestre INT,
+    @IdDistrito INT,
+    @IdCarrera INT,
+    @IdCampus INT,
+    @IdAlumno INT
+AS
+BEGIN
+    INSERT INTO matricula (fecha_matricula, vigencia, id_semestre, id_distrito, id_carrera, id_campus, id_alumno)
+    VALUES (@FechaMatricula, @Vigencia, @IdSemestre, @IdDistrito, @IdCarrera, @IdCampus, @IdAlumno);
+END;
+GO
+
+CREATE PROCEDURE ActualizarMatricula
+    @IdMatricula INT,
+    @FechaMatricula DATE,
+    @Vigencia CHAR(1),
+    @IdSemestre INT,
+    @IdDistrito INT,
+    @IdCarrera INT,
+    @IdCampus INT,
+    @IdAlumno INT
+AS
+BEGIN
+    UPDATE matricula
+    SET fecha_matricula = @FechaMatricula, vigencia = @Vigencia, id_semestre = @IdSemestre,
+        id_distrito = @IdDistrito, id_carrera = @IdCarrera, id_campus = @IdCampus, id_alumno = @IdAlumno
+    WHERE id_matricula = @IdMatricula;
+END;
+GO
+
+-- Pago
+CREATE PROCEDURE InsertarPago
+    @IdEstudiante INT,
+    @Monto DECIMAL(10,2),
+    @FechaLimite DATE,
+    @MetodoPago NVARCHAR(50)
+AS
+BEGIN
+    INSERT INTO pago (id_estudiante, monto, fecha_limite, metodo_pago)
+    VALUES (@IdEstudiante, @Monto, @FechaLimite, @MetodoPago);
+END;
+GO
+
+CREATE PROCEDURE ActualizarPago
+    @IdPago INT,
+    @IdEstudiante INT,
+    @Monto DECIMAL(10,2),
+    @FechaLimite DATE,
+    @MetodoPago NVARCHAR(50)
+AS
+BEGIN
+    UPDATE pago
+    SET id_estudiante = @IdEstudiante, monto = @Monto, fecha_limite = @FechaLimite, metodo_pago = @MetodoPago
+    WHERE id_pago = @IdPago;
+END;
+GO
+
+-- Detalle_Matricula_Pago
+CREATE PROCEDURE InsertarDetalleMatriculaPago
+    @IdMatricula INT,
+    @IdPago INT,
+    @MontoPagado DECIMAL(10,2),
+    @FechaPago DATE
+AS
+BEGIN
+    INSERT INTO detalle_matricula_pago (id_matricula, id_pago, monto_pagado, fecha_pago)
+    VALUES (@IdMatricula, @IdPago, @MontoPagado, @FechaPago);
+END;
+GO
+
+CREATE PROCEDURE ActualizarDetalleMatriculaPago
+    @IdDetalle INT,
+    @IdMatricula INT,
+    @IdPago INT,
+    @MontoPagado DECIMAL(10,2),
+    @FechaPago DATE
+AS
+BEGIN
+    UPDATE detalle_matricula_pago
+    SET id_matricula = @IdMatricula, id_pago = @IdPago, monto_pagado = @MontoPagado, fecha_pago = @FechaPago
+    WHERE id_detalle = @IdDetalle;
+END;
+GO
+
+-- Grupo
+CREATE PROCEDURE InsertarGrupo
+    @Denominacion NVARCHAR(50),
+    @Matriculados INT
+AS
+BEGIN
+    INSERT INTO grupo (denominacion, matriculados)
+    VALUES (@Denominacion, @Matriculados);
+END;
+GO
+
+CREATE PROCEDURE ActualizarGrupo
+    @IdGrupo INT,
+    @Denominacion NVARCHAR(50),
+    @Matriculados INT
+AS
+BEGIN
+    UPDATE grupo
+    SET denominacion = @Denominacion, matriculados = @Matriculados
+    WHERE id_grupo = @IdGrupo;
+END;
+GO
+
+-- Detalle_Matricula
+CREATE PROCEDURE InsertarDetalleMatricula
+    @MatriculaId INT,
+    @GrupoId INT,
+    @Nota INT NULL
+AS
+BEGIN
+    INSERT INTO detalle_matricula (matricula_id, grupo_id, nota)
+    VALUES (@MatriculaId, @GrupoId, @Nota);
+END;
+GO
+
+CREATE PROCEDURE ActualizarDetalleMatricula
+    @MatriculaId INT,
+    @GrupoId INT,
+    @Nota INT NULL
+AS
+BEGIN
+    UPDATE detalle_matricula
+    SET nota = @Nota
+    WHERE matricula_id = @MatriculaId AND grupo_id = @GrupoId;
+END;
+GO
+
+-- Curso
+CREATE PROCEDURE InsertarCurso
+    @Nombre NVARCHAR(50),
+    @Descripcion NVARCHAR(100) NULL
+AS
+BEGIN
+    INSERT INTO curso (nombre, descripcion)
+    VALUES (@Nombre, @Descripcion);
+END;
+GO
+
+CREATE PROCEDURE ActualizarCurso
+    @IdCurso INT,
+    @Nombre NVARCHAR(50),
+    @Descripcion NVARCHAR(100) NULL
+AS
+BEGIN
+    UPDATE curso
+    SET nombre = @Nombre, descripcion = @Descripcion
+    WHERE id_curso = @IdCurso;
+END;
+GO
+
+-- Detalle_Grupo_Curso
+CREATE PROCEDURE InsertarDetalleGrupoCurso
+    @IdGrupo INT,
+    @IdCurso INT
+AS
+BEGIN
+    INSERT INTO detalle_grupo_curso (id_grupo, id_curso)
+    VALUES (@IdGrupo, @IdCurso);
+END;
+GO
+
+CREATE PROCEDURE EliminarDetalleGrupoCurso
+    @IdGrupo INT,
+    @IdCurso INT
+AS
+BEGIN
+    DELETE FROM detalle_grupo_curso
+    WHERE id_grupo = @IdGrupo AND id_curso = @IdCurso;
+END;
+GO
+
+-- Docente
+CREATE PROCEDURE InsertarDocente
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(50),
+    @DNI CHAR(8),
+    @Correo NVARCHAR(50) NULL,
+    @Telefono NVARCHAR(9) NULL
+AS
+BEGIN
+    INSERT INTO docente (nombre, apellido, dni, correo, telefono)
+    VALUES (@Nombre, @Apellido, @DNI, @Correo, @Telefono);
+END;
+GO
+
+CREATE PROCEDURE ActualizarDocente
+    @IdDocente INT,
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(50),
+    @DNI CHAR(8),
+    @Correo NVARCHAR(50) NULL,
+    @Telefono NVARCHAR(9) NULL
+AS
+BEGIN
+    UPDATE docente
+    SET nombre = @Nombre, apellido = @Apellido, dni = @DNI, correo = @Correo, telefono = @Telefono
+    WHERE id_docente = @IdDocente;
+END;
+GO
+
+-- Detalle_Docente_Curso
+CREATE PROCEDURE InsertarDetalleDocenteCurso
+    @IdDocente INT,
+    @IdCurso INT
+AS
+BEGIN
+    INSERT INTO detalle_docente_curso (id_docente, id_curso)
+    VALUES (@IdDocente, @IdCurso);
+END;
+GO
+
+CREATE PROCEDURE EliminarDetalleDocenteCurso
+    @IdDocente INT,
+    @IdCurso INT
+AS
+BEGIN
+    DELETE FROM detalle_docente_curso
+    WHERE id_docente = @IdDocente AND id_curso = @IdCurso;
+END;
+GO
