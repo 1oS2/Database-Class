@@ -1,7 +1,23 @@
-CREATE DATABASE educacion;
-
+CREATE DATABASE educacion; 
+ON PRIMARY
+(
+NAME = 'educacion_Data' ,
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\BdTestV4.mdf',
+SIZE = 10MB,
+MAXSIZE = 300MB,
+FILEGROWTH = 10MB
+)
+LOG ON
+(
+NAME = 'educacion_Log' ,
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\BdTestV4.ldf',
+SIZE = 5MB,
+MAXSIZE = 100MB,
+FILEGROWTH = 5MB
+)
+go
 USE educacion;
-
+go
 DROP TABLE IF EXISTS detalle_docente_curso;
 DROP TABLE IF EXISTS detalle_grupo_curso;
 DROP TABLE IF EXISTS detalle_matricula;
@@ -1089,3 +1105,114 @@ WHERE id_alumno IN (SELECT id_alumno FROM matricula WHERE id_matricula IN
 SELECT nombre
 FROM carrera
 WHERE id_carrera IN (SELECT id_carrera FROM alumno GROUP BY id_carrera HAVING COUNT(id_alumno) > 2);
+
+
+go
+--
+CREATE ROLE administrador;
+CREATE ROLE tecnico;
+CREATE ROLE secretario;
+CREATE ROLE docente;
+go
+ALTER ROLE db_owner ADD MEMBER administrador;
+ 
+--  
+GRANT SELECT, INSERT, UPDATE ON matricula to tecnico
+GRANT SELECT, INSERT, UPDATE ON detalle_matricula to tecnico
+GRANT SELECT, INSERT, UPDATE ON grupo to tecnico
+GRANT SELECT, INSERT, UPDATE ON detalle_grupo_curso to tecnico
+GRANT SELECT, INSERT, UPDATE ON curso to tecnico
+GRANT SELECT, INSERT, UPDATE ON detalle_docente_curso to tecnico
+GRANT SELECT, INSERT, UPDATE ON docente to tecnico
+GRANT SELECT, INSERT, UPDATE ON alumno to tecnico
+GRANT SELECT ON pago to tecnico
+GRANT SELECT ON detalle_matricula_pago to tecnico
+GRANT SELECT, INSERT, UPDATE ON semestre to tecnico
+GRANT SELECT, INSERT, UPDATE ON carrera to tecnico
+GRANT SELECT, INSERT, UPDATE ON facultad to tecnico
+GRANT SELECT, INSERT, UPDATE ON sede to tecnico
+GRANT SELECT, INSERT, UPDATE ON distrito to tecnico
+GRANT SELECT, INSERT, UPDATE ON provincia to tecnico
+GRANT SELECT, INSERT, UPDATE ON departamento to tecnico
+GRANT SELECT, INSERT, UPDATE ON campus to tecnico
+-- 
+GRANT SELECT, INSERT, UPDATE ON matricula to secretario
+GRANT SELECT, INSERT, UPDATE ON detalle_matricula to secretario
+GRANT SELECT ON grupo to secretario
+GRANT SELECT ON detalle_grupo_curso to secretario
+GRANT SELECT ON curso to secretario
+GRANT SELECT ON detalle_docente_curso to secretario
+GRANT SELECT ON docente to secretario
+GRANT SELECT, INSERT, UPDATE ON alumno to secretario
+GRANT SELECT, INSERT ON pago to secretario
+GRANT SELECT, INSERT ON detalle_matricula_pago to secretario
+GRANT SELECT ON semestre to secretario
+GRANT SELECT ON carrera to secretario
+GRANT SELECT ON facultad to secretario
+GRANT SELECT ON sede to secretario
+GRANT SELECT ON distrito to secretario
+GRANT SELECT ON provincia to secretario
+GRANT SELECT ON departamento to secretario
+GRANT SELECT ON campus to secretario
+--
+GRANT SELECT ON grupo to docente
+GRANT SELECT ON detalle_grupo_curso to docente
+GRANT SELECT ON curso to docente
+GRANT SELECT ON detalle_docente_curso to docente
+GRANT SELECT, UPDATE ON docente to docente  
+GRANT SELECT ON semestre to docente
+GRANT SELECT ON carrera to docente
+GRANT SELECT ON facultad to docente
+GRANT SELECT ON sede to docente 
+GRANT SELECT ON distrito to tecnico
+GRANT SELECT ON provincia to tecnico
+GRANT SELECT ON departamento to tecnico
+GRANT SELECT ON campus to docente
+go 
+CREATE LOGIN JhonRamirez WITH PASSWORD = 'contraseña';
+CREATE LOGIN JuliaGarcia WITH PASSWORD = 'contraseña';
+CREATE LOGIN MateoSanchez WITH PASSWORD = 'contraseña';
+CREATE LOGIN Martínez WITH PASSWORD = 'contraseña';
+CREATE LOGIN RuizRomero WITH PASSWORD = 'contraseña';
+CREATE LOGIN GomezCruz WITH PASSWORD = 'contraseña';
+CREATE LOGIN FloresRodriguez WITH PASSWORD = 'contraseña';
+CREATE LOGIN GonzalezHernandez WITH PASSWORD = 'contraseña';
+CREATE LOGIN Lopez WITH PASSWORD = 'contraseña';
+CREATE LOGIN Quispe WITH PASSWORD = 'contraseña';
+CREATE LOGIN MartínezQuispe WITH PASSWORD = 'contraseña';
+CREATE LOGIN Ruiz WITH PASSWORD = 'contraseña';
+CREATE LOGIN Gomez WITH PASSWORD = 'contraseña';
+CREATE LOGIN Flores WITH PASSWORD = 'contraseña';
+go 
+CREATE USER JhonRamirez FOR LOGIN JhonRamirez;
+CREATE USER JuliaGarcia FOR LOGIN JuliaGarcia;
+CREATE USER MateoSanchez FOR LOGIN MateoSanchez;
+CREATE USER Martínez FOR LOGIN Martínez;
+CREATE USER RuizRomero FOR LOGIN RuizRomero;
+CREATE USER GomezCruz FOR LOGIN GomezCruz;
+CREATE USER FloresRodriguez FOR LOGIN FloresRodriguez;
+CREATE USER GonzalezHernandez FOR LOGIN GonzalezHernandez;
+CREATE USER Lopez FOR LOGIN Lopez;
+CREATE USER Quispe FOR LOGIN Quispe;
+CREATE USER MartínezQuispe FOR LOGIN MartínezQuispe;
+CREATE USER Ruiz FOR LOGIN Ruiz;
+CREATE USER Gomez FOR LOGIN Gomez;
+CREATE USER Flores FOR LOGIN Flores;
+
+go 
+ALTER ROLE administrador ADD MEMBER JhonRamirez;
+ALTER ROLE tecnico ADD MEMBER JuliaGarcia;
+ALTER ROLE tecnico ADD MEMBER MateoSanchez;
+ALTER ROLE tecnico ADD MEMBER Martínez;
+ALTER ROLE tecnico ADD MEMBER RuizRomero;
+ALTER ROLE tecnico ADD MEMBER GomezCruz;
+ALTER ROLE tecnico ADD MEMBER FloresRodriguez;
+ALTER ROLE tecnico ADD MEMBER GonzalezHernandez;
+ALTER ROLE tecnico ADD MEMBER Lopez;
+ALTER ROLE docente ADD MEMBER Quispe;
+ALTER ROLE docente ADD MEMBER MartínezQuispe;
+ALTER ROLE docente ADD MEMBER Ruiz;
+ALTER ROLE secretario ADD MEMBER Gomez;
+ALTER ROLE secretario ADD MEMBER Flores;
+
+go
