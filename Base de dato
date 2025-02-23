@@ -1,3 +1,7 @@
+CREATE DATABASE educacion;
+
+USE educacion;
+
 DROP TABLE IF EXISTS detalle_docente_curso;
 DROP TABLE IF EXISTS detalle_grupo_curso;
 DROP TABLE IF EXISTS detalle_matricula;
