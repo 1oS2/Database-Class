@@ -1000,3 +1000,27 @@ BEGIN
     WHERE id_docente = @IdDocente AND id_curso = @IdCurso;
 END;
 GO
+
+
+
+-- INSERT, UPDATE Y DELETE EN LA TABLA MATRICULA
+
+-- INSERTAR REGISTROS
+INSERT INTO matricula (fecha_matricula, vigencia, id_semestre, id_distrito, id_carrera, id_campus, id_alumno)
+VALUES 
+('2028-08-01', 'V', 12, 12, 12, 12, 12),
+('2029-03-01', 'V', 13, 13, 13, 13, 13);
+
+
+-- UPDATE 
+UPDATE matricula
+SET vigencia = 'N'
+WHERE id_matricula = 1; 
+
+UPDATE matricula
+SET id_carrera = 5
+WHERE id_matricula = 2;
+
+
+
+-- DELETE   FALTA 
