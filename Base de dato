@@ -1024,3 +1024,64 @@ WHERE id_matricula = 2;
 
 
 -- DELETE   FALTA 
+
+
+
+
+
+
+
+-- CONSULTAS CON CONDICIONES
+
+-- lista de los alumnos
+SELECT a.nombre, a.apellido, c.nombre AS carrera
+FROM alumno a
+JOIN carrera c ON a.id_carrera = c.id_carrera
+WHERE c.nombre = 'Ingeniería Civil';
+
+-- ver las matriculas acivas
+SELECT * 
+FROM matricula 
+WHERE vigencia = 'V' 
+  AND id_semestre = (SELECT id_semestre FROM semestre WHERE denominacion = '2024-I');
+
+
+ -- CONSULTAS AGRUPADAS
+
+ -- cantidad de alumnos de las carreras
+ SELECT c.nombre AS carrera, COUNT(a.id_alumno) AS cantidad_alumnos
+FROM alumno a
+JOIN carrera c ON a.id_carrera = c.id_carrera
+GROUP BY c.nombre;
+
+-- total de pagos realizados
+SELECT metodo_pago, SUM(monto) AS total_pagado
+FROM pago
+GROUP BY metodo_pago;
+
+
+-- CONSULTAS COMBINADAS
+
+-- lista de los docentes
+SELECT nombre, apellido, 'Alumno' AS rol FROM alumno
+UNION
+SELECT nombre, apellido, 'Docente' AS rol FROM docente;
+
+-- listar los nombres de las sedes y campus
+SELECT nombre, 'Sede' AS tipo FROM sede
+UNION
+SELECT nombre, 'Campus' AS tipo FROM campus;
+
+
+-- SUBCONSULTAS 
+
+-- nombres de los alumnnos que ya realizaron el pago
+SELECT nombre, apellido
+FROM alumno
+WHERE id_alumno IN (SELECT id_alumno FROM matricula WHERE id_matricula IN 
+                   (SELECT id_matricula FROM detalle_matricula_pago));
+
+-- carreras que tienen mas de dos alumnos 
+SELECT nombre
+FROM carrera
+WHERE id_carrera IN (SELECT id_carrera FROM alumno GROUP BY id_carrera HAVING COUNT(id_alumno) > 2);
