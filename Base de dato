@@ -82,14 +82,12 @@ DROP PROCEDURE IF EXISTS ActualizarDetalleMatricula;
 DROP PROCEDURE IF EXISTS InsertarCurso;
 DROP PROCEDURE IF EXISTS ActualizarCurso;
 
-DROP PROCEDURE IF EXISTS InsertarDetalleGrupoCurso;
-DROP PROCEDURE IF EXISTS EliminarDetalleGrupoCurso;
+DROP PROCEDURE IF EXISTS InsertarDetalleGrupoCurso; 
 
 DROP PROCEDURE IF EXISTS InsertarDocente;
 DROP PROCEDURE IF EXISTS ActualizarDocente;
 
-DROP PROCEDURE IF EXISTS InsertarDetalleDocenteCurso;
-DROP PROCEDURE IF EXISTS EliminarDetalleDocenteCurso;
+DROP PROCEDURE IF EXISTS InsertarDetalleDocenteCurso; 
 -------------------------------------------------------------------------------------------------------------------------
 
 DROP PROCEDURE IF EXISTS ObtenerDepartamentoPorId;
@@ -107,6 +105,23 @@ DROP PROCEDURE IF EXISTS ObtenerDetalleMatriculaPagoPorId;
 DROP PROCEDURE IF EXISTS ObtenerGrupoPorId;
 DROP PROCEDURE IF EXISTS ObtenerCursoPorId;
 DROP PROCEDURE IF EXISTS ObtenerDocentePorId;
+
+GO
+
+DROP PROCEDURE IF EXISTS EliminarDepartamento;
+DROP PROCEDURE IF EXISTS EliminarProvincia;
+DROP PROCEDURE IF EXISTS EliminarDistrito;
+DROP PROCEDURE IF EXISTS EliminarSede;
+DROP PROCEDURE IF EXISTS EliminarCampus;
+DROP PROCEDURE IF EXISTS EliminarFacultad;
+DROP PROCEDURE IF EXISTS EliminarCarrera;
+DROP PROCEDURE IF EXISTS EliminarAlumno;
+DROP PROCEDURE IF EXISTS EliminarMatricula;
+DROP PROCEDURE IF EXISTS EliminarPago;
+DROP PROCEDURE IF EXISTS EliminarGrupo;
+DROP PROCEDURE IF EXISTS EliminarCurso;
+DROP PROCEDURE IF EXISTS EliminarDocente;
+
 
 GO
 
@@ -144,13 +159,15 @@ GO
 
 create table departamento (
 	id_departamento int primary key identity(1,1),
-	nombre nvarchar(50) not null
+	nombre nvarchar(50) not null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V'
 );
 
 create table provincia (
 	id_provincia int primary key identity(1,1),
 	nombre nvarchar(50) not null,
 	id_departamento int not null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V',
 	foreign key (id_departamento) references departamento(id_departamento)
 );
 
@@ -158,6 +175,7 @@ create table distrito (
 	id_distrito int primary key identity(1,1),
 	nombre nvarchar(50) not null,
 	id_provincia int not null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V',
 	foreign key (id_provincia) references provincia(id_provincia)
 );
 
@@ -166,6 +184,7 @@ create table sede (
 	nombre nvarchar(100) not null,
 	direccion nvarchar(200) not null,
 	id_distrito int not null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V',
 	foreign key (id_distrito) references distrito(id_distrito)
 );
 
@@ -173,18 +192,21 @@ create table campus (
 	id_campus int primary key identity(1,1),
 	nombre nvarchar(100) not null,
 	id_sede int not null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V',
 	foreign key (id_sede) references sede(id_sede)
 );
 
 create table facultad (
 	id_facultad int primary key identity(1,1),
-	nombre nvarchar(100) not null
+	nombre nvarchar(100) not null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V'
 );
 
 create table carrera (
 	id_carrera int primary key identity(1,1),
 	nombre nvarchar(100) not null,
 	id_facultad int not null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V',
 	foreign key (id_facultad) references facultad(id_facultad)
 );
 
@@ -192,7 +214,8 @@ create table semestre (
 	id_semestre int primary key identity(1,1),
 	denominacion nvarchar(50) not null,
 	fecha_inicio date not null,
-	fecha_fin date not null
+	fecha_fin date not null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V'
 );
 
 create table alumno (
@@ -205,6 +228,7 @@ create table alumno (
 	id_distrito int not null,
 	id_carrera int not null, 
 	id_campus int not null,   
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V',
 	foreign key (id_distrito) references distrito(id_distrito),
 	foreign key (id_carrera) references carrera(id_carrera),
 	foreign key (id_campus) references campus(id_campus)
@@ -213,7 +237,7 @@ create table alumno (
 create table matricula (
 	id_matricula int primary key identity(1,1),
 	fecha_matricula date not null,
-	vigencia char(1) not null CHECK (vigencia IN ('V', 'N')),
+	vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V',
 	id_semestre int not null,
 	id_distrito int not null,
 	id_carrera int not null,
@@ -247,7 +271,8 @@ CREATE TABLE detalle_matricula_pago (
 create table grupo (
 	id_grupo int primary key identity(1,1),
 	denominacion nvarchar(50),
-	matriculados int not null CHECK (matriculados >= 0 and matriculados <= 40)
+	matriculados int not null CHECK (matriculados >= 0 and matriculados <= 40),
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V'
 );
 
 create table detalle_matricula (
@@ -262,7 +287,8 @@ create table detalle_matricula (
 create table curso (
 	id_curso int primary key identity(1,1),
 	nombre nvarchar(50) not null,
-	descripcion nvarchar(100) null
+	descripcion nvarchar(100) null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V'
 );
 
 create table detalle_grupo_curso (
@@ -279,7 +305,8 @@ create table docente (
 	apellido nvarchar(50) not null,
 	dni char(8) not null,
 	correo nvarchar(50) null,
-	telefono nvarchar(9) null
+	telefono nvarchar(9) null,
+    vigencia char(1) not null CHECK (vigencia IN ('V', 'N')) DEFAULT 'V'
 );
 
 create table detalle_docente_curso (
@@ -659,21 +686,40 @@ CREATE PROCEDURE EliminarDepartamento
     @IdDepartamento INT
 AS
 BEGIN  
-    DELETE FROM sede
-    WHERE id_distrito IN (
-        SELECT id_distrito FROM distrito
-        WHERE id_provincia IN (
-            SELECT id_provincia FROM provincia WHERE id_departamento = @IdDepartamento
-        )
-    );
-    DELETE FROM distrito
-    WHERE id_provincia IN (
-        SELECT id_provincia FROM provincia WHERE id_departamento = @IdDepartamento
-    );
+    UPDATE departamento SET vigencia = 'N' WHERE id_departamento = @IdDepartamento;
  
-    DELETE FROM provincia WHERE id_departamento = @IdDepartamento;
+    UPDATE provincia SET vigencia = 'N' WHERE id_departamento = @IdDepartamento;
  
-    DELETE FROM departamento WHERE id_departamento = @IdDepartamento;
+    UPDATE distrito 
+    SET vigencia = 'N' 
+    WHERE id_provincia IN (SELECT id_provincia FROM provincia WHERE id_departamento = @IdDepartamento);
+ 
+    UPDATE sede 
+    SET vigencia = 'N' 
+    WHERE id_distrito IN (SELECT id_distrito FROM distrito WHERE id_provincia IN 
+                         (SELECT id_provincia FROM provincia WHERE id_departamento = @IdDepartamento));
+ 
+    UPDATE campus 
+    SET vigencia = 'N' 
+    WHERE id_sede IN (SELECT id_sede FROM sede WHERE id_distrito IN 
+                     (SELECT id_distrito FROM distrito WHERE id_provincia IN 
+                      (SELECT id_provincia FROM provincia WHERE id_departamento = @IdDepartamento)));
+ 
+    UPDATE alumno 
+    SET vigencia = 'N' 
+    WHERE id_campus IN (SELECT id_campus FROM campus WHERE id_sede IN 
+                        (SELECT id_sede FROM sede WHERE id_distrito IN 
+                         (SELECT id_distrito FROM distrito WHERE id_provincia IN 
+                          (SELECT id_provincia FROM provincia WHERE id_departamento = @IdDepartamento))));
+ 
+    UPDATE matricula 
+    SET vigencia = 'N' 
+    WHERE id_alumno IN (SELECT id_alumno FROM alumno WHERE id_campus IN 
+                        (SELECT id_campus FROM campus WHERE id_sede IN 
+                         (SELECT id_sede FROM sede WHERE id_distrito IN 
+                          (SELECT id_distrito FROM distrito WHERE id_provincia IN 
+                           (SELECT id_provincia FROM provincia WHERE id_departamento = @IdDepartamento)))));
+
 END;
 GO 
 
@@ -713,14 +759,34 @@ CREATE PROCEDURE EliminarProvincia
     @IdProvincia INT
 AS
 BEGIN 
-    DELETE FROM sede
-    WHERE id_distrito IN (
-        SELECT id_distrito FROM distrito WHERE id_provincia = @IdProvincia
-    );
+    UPDATE provincia SET vigencia = 'N' WHERE id_provincia = @IdProvincia;
  
-    DELETE FROM distrito WHERE id_provincia = @IdProvincia;
+    UPDATE distrito 
+    SET vigencia = 'N' 
+    WHERE id_provincia = @IdProvincia;
  
-    DELETE FROM provincia WHERE id_provincia = @IdProvincia;
+    UPDATE sede 
+    SET vigencia = 'N' 
+    WHERE id_distrito IN (SELECT id_distrito FROM distrito WHERE id_provincia = @IdProvincia);
+ 
+    UPDATE campus 
+    SET vigencia = 'N' 
+    WHERE id_sede IN (SELECT id_sede FROM sede WHERE id_distrito IN 
+                     (SELECT id_distrito FROM distrito WHERE id_provincia = @IdProvincia)); 
+
+    UPDATE alumno 
+    SET vigencia = 'N' 
+    WHERE id_campus IN (SELECT id_campus FROM campus WHERE id_sede IN 
+                        (SELECT id_sede FROM sede WHERE id_distrito IN 
+                         (SELECT id_distrito FROM distrito WHERE id_provincia = @IdProvincia)));
+ 
+    UPDATE matricula 
+    SET vigencia = 'N' 
+    WHERE id_alumno IN (SELECT id_alumno FROM alumno WHERE id_campus IN 
+                        (SELECT id_campus FROM campus WHERE id_sede IN 
+                         (SELECT id_sede FROM sede WHERE id_distrito IN 
+                          (SELECT id_distrito FROM distrito WHERE id_provincia = @IdProvincia))));
+
 END;
 GO
 
@@ -760,9 +826,26 @@ CREATE PROCEDURE EliminarDistrito
     @IdDistrito INT
 AS
 BEGIN 
-    DELETE FROM sede WHERE id_distrito = @IdDistrito;
+    UPDATE distrito SET vigencia = 'N' WHERE id_distrito = @IdDistrito;
  
-    DELETE FROM distrito WHERE id_distrito = @IdDistrito;
+    UPDATE sede 
+    SET vigencia = 'N' 
+    WHERE id_distrito = @IdDistrito;
+ 
+    UPDATE campus 
+    SET vigencia = 'N' 
+    WHERE id_sede IN (SELECT id_sede FROM sede WHERE id_distrito = @IdDistrito);
+ 
+    UPDATE alumno 
+    SET vigencia = 'N' 
+    WHERE id_campus IN (SELECT id_campus FROM campus WHERE id_sede IN 
+                        (SELECT id_sede FROM sede WHERE id_distrito = @IdDistrito));
+ 
+    UPDATE matricula 
+    SET vigencia = 'N' 
+    WHERE id_alumno IN (SELECT id_alumno FROM alumno WHERE id_campus IN 
+                        (SELECT id_campus FROM campus WHERE id_sede IN 
+                         (SELECT id_sede FROM sede WHERE id_distrito = @IdDistrito)));
 END;
 GO 
 
@@ -804,9 +887,20 @@ CREATE PROCEDURE EliminarSede
     @IdSede INT
 AS
 BEGIN 
-    DELETE FROM campus WHERE id_sede = @IdSede;
+    UPDATE sede SET vigencia = 'N' WHERE id_sede = @IdSede;
  
-    DELETE FROM sede WHERE id_sede = @IdSede;
+    UPDATE campus 
+    SET vigencia = 'N' 
+    WHERE id_sede = @IdSede;
+ 
+    UPDATE alumno 
+    SET vigencia = 'N' 
+    WHERE id_campus IN (SELECT id_campus FROM campus WHERE id_sede = @IdSede);
+ 
+    UPDATE matricula 
+    SET vigencia = 'N' 
+    WHERE id_alumno IN (SELECT id_alumno FROM alumno WHERE id_campus IN 
+                        (SELECT id_campus FROM campus WHERE id_sede = @IdSede));
 END;
 GO 
 
@@ -829,32 +923,38 @@ END;
 GO
 
 CREATE PROCEDURE ActualizarCampus
-    @IdCampus INT,
+    @id_campus INT,
     @Nombre NVARCHAR(100),
     @IdSede INT
 AS
 BEGIN
     UPDATE campus 
     SET nombre = @Nombre, id_sede = @IdSede
-    WHERE id_campus = @IdCampus;
+    WHERE id_campus = @id_campus;
 END;
 GO
 
 CREATE PROCEDURE EliminarCampus
-    @IdCampus INT
+    @id_campus INT
 AS
 BEGIN 
-    DELETE FROM alumno WHERE id_campus = @IdCampus;
+    UPDATE campus SET vigencia = 'N' WHERE id_campus = @id_campus;
  
-    DELETE FROM campus WHERE id_campus = @IdCampus;
+    UPDATE alumno 
+    SET vigencia = 'N' 
+    WHERE id_campus = @id_campus;
+ 
+    UPDATE matricula 
+    SET vigencia = 'N' 
+    WHERE id_alumno IN (SELECT id_alumno FROM alumno WHERE id_campus = @id_campus);
 END;
 GO 
 
 CREATE PROCEDURE ObtenerCampusPorId
-    @IdCampus INT
+    @id_campus INT
 AS
 BEGIN
-    SELECT * FROM campus WHERE id_campus = @IdCampus;
+    SELECT * FROM campus WHERE id_campus = @id_campus;
 END;
 GO
   
@@ -883,8 +983,21 @@ CREATE PROCEDURE EliminarFacultad
     @IdFacultad INT
 AS
 BEGIN 
-    DELETE FROM carrera WHERE id_facultad = @IdFacultad; 
-    DELETE FROM facultad WHERE id_facultad = @IdFacultad;
+    UPDATE facultad SET vigencia = 'N' WHERE id_facultad = @IdFacultad;
+ 
+    UPDATE carrera 
+    SET vigencia = 'N' 
+    WHERE id_facultad = @IdFacultad;
+ 
+    UPDATE alumno 
+    SET vigencia = 'N' 
+    WHERE id_carrera IN (SELECT id_carrera FROM carrera WHERE id_facultad = @IdFacultad);
+ 
+    UPDATE matricula 
+    SET vigencia = 'N' 
+    WHERE id_alumno IN (SELECT id_alumno FROM alumno WHERE id_carrera IN 
+                        (SELECT id_carrera FROM carrera WHERE id_facultad = @IdFacultad));
+
 END;
 GO
   
@@ -926,9 +1039,15 @@ BEGIN
     SET vigencia = 'N'
     WHERE id_carrera = @IdCarrera; 
 
-    DELETE FROM alumno WHERE id_carrera = @IdCarrera;
+    UPDATE carrera SET vigencia = 'N' WHERE id_carrera = @IdCarrera;
  
-    DELETE FROM carrera WHERE id_carrera = @IdCarrera;
+    UPDATE alumno 
+    SET vigencia = 'N' 
+    WHERE id_carrera = @IdCarrera;
+ 
+    UPDATE matricula 
+    SET vigencia = 'N' 
+    WHERE id_alumno IN (SELECT id_alumno FROM alumno WHERE id_carrera = @IdCarrera);
 END;
 GO
 
@@ -982,11 +1101,11 @@ CREATE PROCEDURE InsertarAlumno
     @Telefono NVARCHAR(9),
     @IdDistrito INT,
     @IdCarrera INT,
-    @IdCampus INT
+    @id_campus INT
 AS
 BEGIN
     INSERT INTO alumno (nombre, apellido, dni, correo, telefono, id_distrito, id_carrera, id_campus)
-    VALUES (@Nombre, @Apellido, @DNI, @Correo, @Telefono, @IdDistrito, @IdCarrera, @IdCampus);
+    VALUES (@Nombre, @Apellido, @DNI, @Correo, @Telefono, @IdDistrito, @IdCarrera, @id_campus);
 END;
 GO
 
@@ -999,12 +1118,12 @@ CREATE PROCEDURE ActualizarAlumno
     @Telefono NVARCHAR(9),
     @IdDistrito INT,
     @IdCarrera INT,
-    @IdCampus INT
+    @id_campus INT
 AS
 BEGIN
     UPDATE alumno
     SET nombre = @Nombre, apellido = @Apellido, dni = @DNI, correo = @Correo, telefono = @Telefono,
-        id_distrito = @IdDistrito, id_carrera = @IdCarrera, id_campus = @IdCampus
+        id_distrito = @IdDistrito, id_carrera = @IdCarrera, id_campus = @id_campus
     WHERE id_alumno = @IdAlumno;
 END;
 GO
@@ -1013,11 +1132,9 @@ CREATE PROCEDURE EliminarAlumno
     @IdAlumno INT
 AS
 BEGIN 
-    UPDATE matricula
-    SET vigencia = 'N'
-    WHERE id_alumno = @IdAlumno; 
-
-    DELETE FROM alumno WHERE id_alumno = @IdAlumno;
+    UPDATE alumno SET vigencia = 'N' WHERE id_alumno = @IdAlumno;
+ 
+    UPDATE matricula SET vigencia = 'N' WHERE id_alumno = @IdAlumno;
 END;
 GO
 
@@ -1035,12 +1152,12 @@ CREATE PROCEDURE InsertarMatricula
     @IdSemestre INT,
     @IdDistrito INT,
     @IdCarrera INT,
-    @IdCampus INT,
+    @id_campus INT,
     @IdAlumno INT
 AS
 BEGIN
     INSERT INTO matricula (fecha_matricula, vigencia, id_semestre, id_distrito, id_carrera, id_campus, id_alumno)
-    VALUES (@FechaMatricula, @Vigencia, @IdSemestre, @IdDistrito, @IdCarrera, @IdCampus, @IdAlumno);
+    VALUES (@FechaMatricula, @Vigencia, @IdSemestre, @IdDistrito, @IdCarrera, @id_campus, @IdAlumno);
 END;
 GO
 
@@ -1051,13 +1168,13 @@ CREATE PROCEDURE ActualizarMatricula
     @IdSemestre INT,
     @IdDistrito INT,
     @IdCarrera INT,
-    @IdCampus INT,
+    @id_campus INT,
     @IdAlumno INT
 AS
 BEGIN
     UPDATE matricula
     SET fecha_matricula = @FechaMatricula, vigencia = @Vigencia, id_semestre = @IdSemestre,
-        id_distrito = @IdDistrito, id_carrera = @IdCarrera, id_campus = @IdCampus, id_alumno = @IdAlumno
+        id_distrito = @IdDistrito, id_carrera = @IdCarrera, id_campus = @id_campus, id_alumno = @IdAlumno
     WHERE id_matricula = @IdMatricula;
 END;
 GO
@@ -1175,9 +1292,8 @@ CREATE PROCEDURE EliminarGrupo
     @IdGrupo INT
 AS
 BEGIN 
-    DELETE FROM detalle_matricula WHERE grupo_id = @IdGrupo; 
-    DELETE FROM detalle_grupo_curso WHERE id_grupo = @IdGrupo; 
-    DELETE FROM grupo WHERE id_grupo = @IdGrupo;
+    UPDATE grupo SET vigencia = 'N' WHERE id_grupo = @IdGrupo;
+  
 END;
 GO
 
@@ -1251,9 +1367,9 @@ CREATE PROCEDURE EliminarCurso
     @IdCurso INT
 AS
 BEGIN 
-    DELETE FROM detalle_grupo_curso WHERE id_curso = @IdCurso; 
-    DELETE FROM detalle_docente_curso WHERE id_curso = @IdCurso; 
-    DELETE FROM curso WHERE id_curso = @IdCurso;
+    UPDATE curso 
+    SET vigencia = 'N' 
+    WHERE id_curso = @IdCurso;
 END;
 GO  
 
@@ -1267,17 +1383,7 @@ BEGIN
     VALUES (@IdGrupo, @IdCurso);
 END;
 GO
-
-CREATE PROCEDURE EliminarDetalleGrupoCurso
-    @IdGrupo INT,
-    @IdCurso INT
-AS
-BEGIN
-    DELETE FROM detalle_grupo_curso
-    WHERE id_grupo = @IdGrupo AND id_curso = @IdCurso;
-END;
-GO
-
+ 
 -- Docente
 CREATE PROCEDURE InsertarDocente
     @Nombre NVARCHAR(50),
@@ -1311,8 +1417,9 @@ CREATE PROCEDURE EliminarDocente
     @IdDocente INT
 AS
 BEGIN 
-    DELETE FROM detalle_docente_curso WHERE id_docente = @IdDocente; 
-    DELETE FROM docente WHERE id_docente = @IdDocente;
+    UPDATE docente 
+    SET vigencia = 'N' 
+    WHERE id_docente = @IdDocente;
 END;
 GO
 
@@ -1335,15 +1442,6 @@ BEGIN
 END;
 GO
 
-CREATE PROCEDURE EliminarDetalleDocenteCurso
-    @IdDocente INT,
-    @IdCurso INT
-AS
-BEGIN
-    DELETE FROM detalle_docente_curso
-    WHERE id_docente = @IdDocente AND id_curso = @IdCurso;
-END;
-GO
 -------------------------------------------------------------------------------------------------------------------------
 
 
@@ -1358,9 +1456,6 @@ VALUES
 
 
 -- UPDATE 
-UPDATE matricula
-SET vigencia = 'N'
-WHERE id_matricula = 1; 
 
 UPDATE matricula
 SET id_carrera = 5
@@ -1368,7 +1463,19 @@ WHERE id_matricula = 2;
 
 
 
--- DELETE   FALTA 
+-- DELETE
+UPDATE matricula
+SET vigencia = 'N'
+WHERE id_matricula = 1; 
+
+UPDATE matricula
+SET vigencia = 'N'
+WHERE id_matricula = 3;
+
+UPDATE matricula
+SET vigencia = 'N'
+WHERE id_matricula = 4 
+
 
 
 -------------------------------------------------------------------------------------------------------------------------
