@@ -601,6 +601,29 @@ BEGIN
 END;
 GO
 
+
+CREATE PROCEDURE EliminarDepartamento
+    @IdDepartamento INT
+AS
+BEGIN  
+    DELETE FROM sede
+    WHERE id_distrito IN (
+        SELECT id_distrito FROM distrito
+        WHERE id_provincia IN (
+            SELECT id_provincia FROM provincia WHERE id_departamento = @IdDepartamento
+        )
+    );
+    DELETE FROM distrito
+    WHERE id_provincia IN (
+        SELECT id_provincia FROM provincia WHERE id_departamento = @IdDepartamento
+    );
+ 
+    DELETE FROM provincia WHERE id_departamento = @IdDepartamento;
+ 
+    DELETE FROM departamento WHERE id_departamento = @IdDepartamento;
+END;
+GO 
+
 -- Provincia
 CREATE PROCEDURE InsertarProvincia
     @Nombre NVARCHAR(50),
@@ -623,6 +646,23 @@ BEGIN
 END;
 GO
 
+
+CREATE PROCEDURE EliminarProvincia
+    @IdProvincia INT
+AS
+BEGIN 
+    DELETE FROM sede
+    WHERE id_distrito IN (
+        SELECT id_distrito FROM distrito WHERE id_provincia = @IdProvincia
+    );
+ 
+    DELETE FROM distrito WHERE id_provincia = @IdProvincia;
+ 
+    DELETE FROM provincia WHERE id_provincia = @IdProvincia;
+END;
+GO
+
+
 -- Distrito
 CREATE PROCEDURE InsertarDistrito
     @Nombre NVARCHAR(50),
@@ -644,6 +684,18 @@ BEGIN
     WHERE id_distrito = @IdDistrito;
 END;
 GO
+
+ 
+CREATE PROCEDURE EliminarDistrito
+    @IdDistrito INT
+AS
+BEGIN 
+    DELETE FROM sede WHERE id_distrito = @IdDistrito;
+ 
+    DELETE FROM distrito WHERE id_distrito = @IdDistrito;
+END;
+GO 
+
 
 -- Sede
 CREATE PROCEDURE InsertarSede
@@ -669,6 +721,17 @@ BEGIN
 END;
 GO
 
+
+CREATE PROCEDURE EliminarSede
+    @IdSede INT
+AS
+BEGIN 
+    DELETE FROM campus WHERE id_sede = @IdSede;
+ 
+    DELETE FROM sede WHERE id_sede = @IdSede;
+END;
+GO 
+
 -- Campus
 CREATE PROCEDURE InsertarCampus
     @Nombre NVARCHAR(100),
@@ -691,6 +754,18 @@ BEGIN
 END;
 GO
 
+
+CREATE PROCEDURE EliminarCampus
+    @IdCampus INT
+AS
+BEGIN 
+    DELETE FROM alumno WHERE id_campus = @IdCampus;
+ 
+    DELETE FROM campus WHERE id_campus = @IdCampus;
+END;
+GO 
+  
+
 -- Facultad
 CREATE PROCEDURE InsertarFacultad
     @Nombre NVARCHAR(100)
@@ -710,6 +785,16 @@ BEGIN
     WHERE id_facultad = @IdFacultad;
 END;
 GO
+ 
+CREATE PROCEDURE EliminarFacultad
+    @IdFacultad INT
+AS
+BEGIN 
+    DELETE FROM carrera WHERE id_facultad = @IdFacultad; 
+    DELETE FROM facultad WHERE id_facultad = @IdFacultad;
+END;
+GO
+  
 
 -- Carrera
 CREATE PROCEDURE InsertarCarrera
@@ -730,6 +815,20 @@ BEGIN
     UPDATE carrera 
     SET nombre = @Nombre, id_facultad = @IdFacultad
     WHERE id_carrera = @IdCarrera;
+END;
+GO
+
+CREATE PROCEDURE EliminarCarrera
+    @IdCarrera INT
+AS
+BEGIN 
+    UPDATE matricula
+    SET vigencia = 'N'
+    WHERE id_carrera = @IdCarrera; 
+
+    DELETE FROM alumno WHERE id_carrera = @IdCarrera;
+ 
+    DELETE FROM carrera WHERE id_carrera = @IdCarrera;
 END;
 GO
 
@@ -794,6 +893,17 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE EliminarAlumno
+    @IdAlumno INT
+AS
+BEGIN 
+    UPDATE matricula
+    SET vigencia = 'N'
+    WHERE id_alumno = @IdAlumno; 
+
+    DELETE FROM alumno WHERE id_alumno = @IdAlumno;
+END;
+GO
 -- Matricula
 CREATE PROCEDURE InsertarMatricula
     @FechaMatricula DATE,
@@ -827,6 +937,16 @@ BEGIN
     WHERE id_matricula = @IdMatricula;
 END;
 GO
+CREATE PROCEDURE EliminarMatricula
+    @IdMatricula INT
+AS
+BEGIN
+    UPDATE matricula
+    SET vigencia = 'N'
+    WHERE id_matricula = @IdMatricula;
+END;
+GO
+
 
 -- Pago
 CREATE PROCEDURE InsertarPago 
@@ -903,6 +1023,17 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE EliminarGrupo
+    @IdGrupo INT
+AS
+BEGIN 
+    DELETE FROM detalle_matricula WHERE grupo_id = @IdGrupo; 
+    DELETE FROM detalle_grupo_curso WHERE id_grupo = @IdGrupo; 
+    DELETE FROM grupo WHERE id_grupo = @IdGrupo;
+END;
+GO
+ 
+
 -- Detalle_Matricula
 CREATE PROCEDURE InsertarDetalleMatricula
     @MatriculaId INT,
@@ -949,6 +1080,17 @@ BEGIN
     WHERE id_curso = @IdCurso;
 END;
 GO
+
+
+CREATE PROCEDURE EliminarCurso
+    @IdCurso INT
+AS
+BEGIN 
+    DELETE FROM detalle_grupo_curso WHERE id_curso = @IdCurso; 
+    DELETE FROM detalle_docente_curso WHERE id_curso = @IdCurso; 
+    DELETE FROM curso WHERE id_curso = @IdCurso;
+END;
+GO  
 
 -- Detalle_Grupo_Curso
 CREATE PROCEDURE InsertarDetalleGrupoCurso
@@ -999,6 +1141,16 @@ BEGIN
     WHERE id_docente = @IdDocente;
 END;
 GO
+
+CREATE PROCEDURE EliminarDocente
+    @IdDocente INT
+AS
+BEGIN 
+    DELETE FROM detalle_docente_curso WHERE id_docente = @IdDocente; 
+    DELETE FROM docente WHERE id_docente = @IdDocente;
+END;
+GO
+go
 
 -- Detalle_Docente_Curso
 CREATE PROCEDURE InsertarDetalleDocenteCurso
