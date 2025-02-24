@@ -1374,7 +1374,7 @@ WHERE id_matricula = 2;
 -------------------------------------------------------------------------------------------------------------------------
 
 
--- Vistas de consultas con condiciones
+-- VISTAS DE CONSULTAS CON CONDICIONES
 CREATE VIEW Vista_Alumnos_Distrito AS
 SELECT * FROM Alumnos WHERE Distrito = 'Lima';
 
@@ -1389,7 +1389,7 @@ SELECT * FROM Docentes WHERE Correo IS NOT NULL;
 
 
 
--- Vistas consultas agrupadas
+-- VISTAS CONSULTAS AGRUPADAS
 CREATE VIEW Vista_Alumnos_Por_Carrera AS
 SELECT CarreraID, COUNT(*) AS TotalAlumnos FROM Alumnos GROUP BY CarreraID;
 
@@ -1405,7 +1405,7 @@ SELECT Semestre, COUNT(*) AS TotalMatriculados FROM Matriculas GROUP BY Semestre
 
 
 
--- Vistas consultas combinadas
+-- VISTAS CONSULTAS COMBINADAS
 CREATE VIEW Vista_Estudiantes_Docentes AS
 SELECT ID, Nombre, Apellido, 'Estudiante' AS Tipo FROM Alumnos
 UNION
@@ -1428,7 +1428,7 @@ SELECT Provincia FROM Sedes;
 
 
 
--- Vistas subconsultas
+-- VISTAS SUBCONSULTAS
 CREATE VIEW Vista_Matriculas_Alumnos AS
 SELECT m.MatriculaID, a.Nombre, c.Nombre AS Carrera FROM Matriculas m
 JOIN Alumnos a ON m.AlumnoID = a.ID
