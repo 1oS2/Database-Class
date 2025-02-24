@@ -1374,101 +1374,78 @@ WHERE id_matricula = 2;
 -------------------------------------------------------------------------------------------------------------------------
 
 
--- CONSULTAS CON CONDICIONES
--- 1. Obtener los alumnos de la carrera de Ingeniería Civil
-SELECT * FROM alumno
-WHERE id_carrera = (SELECT id_carrera FROM carrera WHERE nombre = 'Ingeniería Civil');
+-- Vistas de consultas con condiciones
+CREATE VIEW Vista_Alumnos_Distrito AS
+SELECT * FROM Alumnos WHERE Distrito = 'Lima';
 
--- 2. Listar los pagos realizados por transferencia bancaria mayores a 500 soles
-SELECT * FROM pago
-WHERE metodo_pago = 'Transferencia bancaria' AND monto > 500;
+CREATE VIEW Vista_Matriculas_Vigentes AS
+SELECT * FROM Matriculas WHERE Estado = 'Vigente';
 
--- 3. Mostrar los alumnos matriculados en el semestre 2025-I
-SELECT a.*
-FROM alumno a
-JOIN matricula m ON a.id_alumno = m.id_alumno
-WHERE m.id_semestre = (SELECT id_semestre FROM semestre WHERE denominacion = '2025-I');
+CREATE VIEW Vista_Sedes_Provincia AS
+SELECT * FROM Sedes WHERE Provincia = 'Arequipa';
 
--- 4. Listar las sedes ubicadas en el distrito de 'San Sebastián'
-SELECT * FROM sede
-WHERE id_distrito = (SELECT id_distrito FROM distrito WHERE nombre = 'San Sebastián');
+CREATE VIEW Vista_Docentes_Correo AS
+SELECT * FROM Docentes WHERE Correo IS NOT NULL;
 
 
 
--- CONSULTAS AGRUPADAS
--- 1. Contar el número de alumnos por carrera
-SELECT id_carrera, COUNT(*) AS cantidad_alumnos
-FROM alumno
-GROUP BY id_carrera;
+-- Vistas consultas agrupadas
+CREATE VIEW Vista_Alumnos_Por_Carrera AS
+SELECT CarreraID, COUNT(*) AS TotalAlumnos FROM Alumnos GROUP BY CarreraID;
 
--- 2. Total de pagos realizados por cada método de pago
-SELECT metodo_pago, SUM(monto) AS total_recaudado
-FROM pago
-GROUP BY metodo_pago;
+CREATE VIEW Vista_Sedes_Departamento AS
+SELECT Departamento, COUNT(*) AS TotalSedes FROM Sedes GROUP BY Departamento;
 
--- 3. Número de matrículas activas e inactivas
-SELECT vigencia, COUNT(*) AS cantidad
-FROM matricula
-GROUP BY vigencia;
+CREATE VIEW Vista_Total_Pagos_Metodo AS
+SELECT MetodoPago, SUM(Monto) AS TotalPagado FROM Pagos GROUP BY MetodoPago;
 
--- 4. Cantidad de alumnos por distrito
-SELECT id_distrito, COUNT(*) AS total_alumnos
-FROM alumno
-GROUP BY id_distrito;
-
-
-
--- CONSULTAS COMBINADAS
--- 1. Mostrar todos los alumnos y sus respectivas matrículas (INNER JOIN)
-SELECT a.nombre, a.apellido, m.fecha_matricula, m.vigencia
-FROM alumno a
-INNER JOIN matricula m ON a.id_alumno = m.id_alumno;
-
--- 2. Obtener todos los docentes y los cursos que dictan (LEFT JOIN)
-SELECT d.nombre AS docente, d.apellido, c.nombre AS curso
-FROM docente d
-LEFT JOIN detalle_docente_curso dc ON d.id_docente = dc.id_docente
-LEFT JOIN curso c ON dc.id_curso = c.id_curso;
-
--- 3. Listar todas las sedes y sus respectivos campus (RIGHT JOIN)
-SELECT s.nombre AS sede, c.nombre AS campus
-FROM sede s
-RIGHT JOIN campus c ON s.id_sede = c.id_sede;
-
--- 4. Mostrar los alumnos y sus pagos (FULL JOIN)
-SELECT a.nombre, a.apellido, p.monto, p.fecha_limite
-FROM alumno a
-FULL JOIN matricula m ON a.id_alumno = m.id_alumno
-FULL JOIN detalle_matricula_pago dmp ON m.id_matricula = dmp.id_matricula
-FULL JOIN pago p ON dmp.id_pago = p.id_pago;
+CREATE VIEW Vista_Matriculados_Semestre AS
+SELECT Semestre, COUNT(*) AS TotalMatriculados FROM Matriculas GROUP BY Semestre;
 
 
 
 
--- SUBCONSULTAS 
--- 1. Obtener el alumno con el monto de pago más alto
-SELECT * FROM alumno
-WHERE id_alumno = (SELECT id_alumno FROM matricula WHERE id_matricula = 
-                   (SELECT id_matricula FROM detalle_matricula_pago WHERE monto_pagado = 
-                    (SELECT MAX(monto_pagado) FROM detalle_matricula_pago)));
+-- Vistas consultas combinadas
+CREATE VIEW Vista_Estudiantes_Docentes AS
+SELECT ID, Nombre, Apellido, 'Estudiante' AS Tipo FROM Alumnos
+UNION
+SELECT ID, Nombre, Apellido, 'Docente' AS Tipo FROM Docentes;
 
--- 2. Listar los cursos dictados por más de un docente
-SELECT nombre FROM curso
-WHERE id_curso IN (SELECT id_curso FROM detalle_docente_curso
-                   GROUP BY id_curso
-                   HAVING COUNT(id_docente) > 1);
+CREATE VIEW Vista_Apellidos_Comunes AS
+SELECT Apellido FROM Alumnos
+UNION
+SELECT Apellido FROM Docentes;
 
--- 3. Mostrar las facultades que tienen más de 2 carreras
-SELECT * FROM facultad
-WHERE id_facultad IN (SELECT id_facultad FROM carrera
-                      GROUP BY id_facultad
-                      HAVING COUNT(id_carrera) > 2);
+CREATE VIEW Vista_Cursos_Grupos AS
+SELECT CursoID, Nombre FROM Cursos WHERE CursoID IN (SELECT DISTINCT CursoID FROM Grupos)
+UNION
+SELECT GrupoID, Nombre FROM Grupos WHERE GrupoID IN (SELECT DISTINCT GrupoID FROM Matriculas);
 
--- 4. Listar los distritos donde hay más de una sede
-SELECT nombre FROM distrito
-WHERE id_distrito IN (SELECT id_distrito FROM sede
-                      GROUP BY id_distrito
-                      HAVING COUNT(id_sede) > 1);
+CREATE VIEW Vista_Ubicaciones_Sedes AS
+SELECT Departamento FROM Sedes
+UNION
+SELECT Provincia FROM Sedes;
+
+
+
+-- Vistas subconsultas
+CREATE VIEW Vista_Matriculas_Alumnos AS
+SELECT m.MatriculaID, a.Nombre, c.Nombre AS Carrera FROM Matriculas m
+JOIN Alumnos a ON m.AlumnoID = a.ID
+JOIN Carreras c ON a.CarreraID = c.ID;
+
+CREATE VIEW Vista_Pagos_Alumnos AS
+SELECT p.PagoID, a.Nombre, p.Monto FROM Pagos p
+JOIN Alumnos a ON p.AlumnoID = a.ID;
+
+CREATE VIEW Vista_Docentes_Cursos AS
+SELECT d.Nombre, c.Nombre AS Curso FROM Docentes d
+JOIN Cursos c ON d.ID = c.DocenteID;
+
+CREATE VIEW Vista_Grupos_Mas_10 AS
+SELECT GrupoID FROM Matriculas
+GROUP BY GrupoID HAVING COUNT(*) > 10;
+
 go
 --
 CREATE ROLE administrador;
