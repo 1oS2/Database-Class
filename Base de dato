@@ -2,7 +2,7 @@ CREATE DATABASE educacion;
 /*ON PRIMARY
 (
 NAME = 'educacion_Data' ,
-FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\BdTestV4.mdf',
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\educacion.mdf',
 SIZE = 10MB,
 MAXSIZE = 300MB,
 FILEGROWTH = 10MB
@@ -10,7 +10,7 @@ FILEGROWTH = 10MB
 LOG ON
 (
 NAME = 'educacion_Log' ,
-FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\BdTestV4.ldf',
+FILENAME = 'C:\Program Files\Microsoft SQL Server\MSSQL16.SQLEXPRESS\MSSQL\DATA\educacion.ldf',
 SIZE = 5MB,
 MAXSIZE = 100MB,
 FILEGROWTH = 5MB
@@ -91,6 +91,56 @@ DROP PROCEDURE IF EXISTS ActualizarDocente;
 DROP PROCEDURE IF EXISTS InsertarDetalleDocenteCurso;
 DROP PROCEDURE IF EXISTS EliminarDetalleDocenteCurso;
 -------------------------------------------------------------------------------------------------------------------------
+
+DROP PROCEDURE IF EXISTS ObtenerDepartamentoPorId;
+DROP PROCEDURE IF EXISTS ObtenerProvinciaPorId;
+DROP PROCEDURE IF EXISTS ObtenerDistritoPorId;
+DROP PROCEDURE IF EXISTS ObtenerSedePorId;
+DROP PROCEDURE IF EXISTS ObtenerCampusPorId;
+DROP PROCEDURE IF EXISTS ObtenerFacultadPorId;
+DROP PROCEDURE IF EXISTS ObtenerCarreraPorId;
+DROP PROCEDURE IF EXISTS ObtenerSemestrePorId;
+DROP PROCEDURE IF EXISTS ObtenerAlumnoPorId;
+DROP PROCEDURE IF EXISTS ObtenerMatriculaPorId;
+DROP PROCEDURE IF EXISTS ObtenerPagoPorId;
+DROP PROCEDURE IF EXISTS ObtenerDetalleMatriculaPagoPorId;
+DROP PROCEDURE IF EXISTS ObtenerGrupoPorId;
+DROP PROCEDURE IF EXISTS ObtenerCursoPorId;
+DROP PROCEDURE IF EXISTS ObtenerDocentePorId;
+
+GO
+
+DROP USER IF EXISTS JhonRamirez;
+DROP USER IF EXISTS JuliaGarcia;
+DROP USER IF EXISTS MateoSanchez;
+DROP USER IF EXISTS Martínez;
+DROP USER IF EXISTS RuizRomero;
+DROP USER IF EXISTS GomezCruz;
+DROP USER IF EXISTS FloresRodriguez;
+DROP USER IF EXISTS GonzalezHernandez;
+DROP USER IF EXISTS Lopez;
+DROP USER IF EXISTS Quispe;
+DROP USER IF EXISTS MartínezQuispe;
+DROP USER IF EXISTS Ruiz;
+DROP USER IF EXISTS Gomez;
+DROP USER IF EXISTS Flores;
+GO 
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'JhonRamirez') DROP LOGIN JhonRamirez;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'JuliaGarcia') DROP LOGIN JuliaGarcia;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'MateoSanchez') DROP LOGIN MateoSanchez;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'Martínez') DROP LOGIN Martínez;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'RuizRomero') DROP LOGIN RuizRomero;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'GomezCruz') DROP LOGIN GomezCruz;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'FloresRodriguez') DROP LOGIN FloresRodriguez;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'GonzalezHernandez') DROP LOGIN GonzalezHernandez;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'Lopez') DROP LOGIN Lopez;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'Quispe') DROP LOGIN Quispe;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'MartínezQuispe') DROP LOGIN MartínezQuispe;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'Ruiz') DROP LOGIN Ruiz;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'Gomez') DROP LOGIN Gomez;
+IF EXISTS (SELECT 1 FROM sys.server_principals WHERE name = 'Flores') DROP LOGIN Flores;
+GO
+
 
 create table departamento (
 	id_departamento int primary key identity(1,1),
@@ -627,6 +677,15 @@ BEGIN
 END;
 GO 
 
+
+CREATE PROCEDURE ObtenerDepartamentoPorId
+    @IdDepartamento INT
+AS
+BEGIN
+    SELECT * FROM departamento WHERE id_departamento = @IdDepartamento;
+END;
+GO
+
 -- Provincia
 CREATE PROCEDURE InsertarProvincia
     @Nombre NVARCHAR(50),
@@ -665,6 +724,14 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE ObtenerProvinciaPorId
+    @IdProvincia INT
+AS
+BEGIN
+    SELECT * FROM provincia WHERE id_provincia = @IdProvincia;
+END;
+GO
+
 
 -- Distrito
 CREATE PROCEDURE InsertarDistrito
@@ -699,6 +766,14 @@ BEGIN
 END;
 GO 
 
+CREATE PROCEDURE ObtenerDistritoPorId
+    @IdDistrito INT
+AS
+BEGIN
+    SELECT * FROM distrito WHERE id_distrito = @IdDistrito;
+END;
+GO
+ 
 
 -- Sede
 CREATE PROCEDURE InsertarSede
@@ -735,6 +810,14 @@ BEGIN
 END;
 GO 
 
+CREATE PROCEDURE ObtenerSedePorId
+    @IdSede INT
+AS
+BEGIN
+    SELECT * FROM sede WHERE id_sede = @IdSede;
+END;
+GO
+
 -- Campus
 CREATE PROCEDURE InsertarCampus
     @Nombre NVARCHAR(100),
@@ -757,7 +840,6 @@ BEGIN
 END;
 GO
 
-
 CREATE PROCEDURE EliminarCampus
     @IdCampus INT
 AS
@@ -767,6 +849,14 @@ BEGIN
     DELETE FROM campus WHERE id_campus = @IdCampus;
 END;
 GO 
+
+CREATE PROCEDURE ObtenerCampusPorId
+    @IdCampus INT
+AS
+BEGIN
+    SELECT * FROM campus WHERE id_campus = @IdCampus;
+END;
+GO
   
 
 -- Facultad
@@ -798,6 +888,13 @@ BEGIN
 END;
 GO
   
+CREATE PROCEDURE ObtenerFacultadPorId
+    @IdFacultad INT
+AS
+BEGIN
+    SELECT * FROM facultad WHERE id_facultad = @IdFacultad;
+END;
+GO
 
 -- Carrera
 CREATE PROCEDURE InsertarCarrera
@@ -835,6 +932,14 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE ObtenerCarreraPorId
+    @IdCarrera INT
+AS
+BEGIN
+    SELECT * FROM carrera WHERE id_carrera = @IdCarrera;
+END;
+GO
+
 -- Semestre
 CREATE PROCEDURE InsertarSemestre
     @Denominacion NVARCHAR(50),
@@ -859,6 +964,14 @@ BEGIN
     WHERE id_semestre = @IdSemestre;
 END;
 GO
+
+CREATE PROCEDURE ObtenerSemestrePorId
+    @IdSemestre INT
+AS
+BEGIN
+    SELECT * FROM semestre WHERE id_semestre = @IdSemestre;
+END;
+GO 
 
 -- Alumno
 CREATE PROCEDURE InsertarAlumno
@@ -907,6 +1020,14 @@ BEGIN
     DELETE FROM alumno WHERE id_alumno = @IdAlumno;
 END;
 GO
+
+CREATE PROCEDURE ObtenerAlumnoPorId
+    @IdAlumno INT
+AS
+BEGIN
+    SELECT * FROM alumno WHERE id_alumno = @IdAlumno;
+END;
+GO
 -- Matricula
 CREATE PROCEDURE InsertarMatricula
     @FechaMatricula DATE,
@@ -950,6 +1071,14 @@ BEGIN
 END;
 GO
 
+CREATE PROCEDURE ObtenerMatriculaPorId
+    @IdMatricula INT
+AS
+BEGIN
+    SELECT * FROM matricula WHERE id_matricula = @IdMatricula;
+END;
+GO
+
 
 -- Pago
 CREATE PROCEDURE InsertarPago 
@@ -973,6 +1102,14 @@ BEGIN
     UPDATE pago
     SET  monto = @Monto, fecha_limite = @FechaLimite, metodo_pago = @MetodoPago
     WHERE id_pago = @IdPago;
+END;
+GO
+
+CREATE PROCEDURE ObtenerPagoPorId
+    @IdPago INT
+AS
+BEGIN
+    SELECT * FROM pago WHERE id_pago = @IdPago;
 END;
 GO
 
@@ -1000,6 +1137,14 @@ BEGIN
     UPDATE detalle_matricula_pago
     SET id_matricula = @IdMatricula, id_pago = @IdPago, monto_pagado = @MontoPagado, fecha_pago = @FechaPago
     WHERE id_detalle = @IdDetalle;
+END;
+GO
+
+CREATE PROCEDURE ObtenerDetalleMatriculaPagoPorId
+    @IdDetalle INT
+AS
+BEGIN
+    SELECT * FROM detalle_matricula_pago WHERE id_detalle = @IdDetalle;
 END;
 GO
 
@@ -1035,6 +1180,15 @@ BEGIN
     DELETE FROM grupo WHERE id_grupo = @IdGrupo;
 END;
 GO
+
+
+CREATE PROCEDURE ObtenerGrupoPorId
+    @IdGrupo INT
+AS
+BEGIN
+    SELECT * FROM grupo WHERE id_grupo = @IdGrupo;
+END;
+GO 
  
 
 -- Detalle_Matricula
@@ -1081,6 +1235,14 @@ BEGIN
     UPDATE curso
     SET nombre = @Nombre, descripcion = @Descripcion
     WHERE id_curso = @IdCurso;
+END;
+GO
+
+CREATE PROCEDURE ObtenerCursoPorId
+    @IdCurso INT
+AS
+BEGIN
+    SELECT * FROM curso WHERE id_curso = @IdCurso;
 END;
 GO
 
@@ -1153,7 +1315,14 @@ BEGIN
     DELETE FROM docente WHERE id_docente = @IdDocente;
 END;
 GO
-go
+
+CREATE PROCEDURE ObtenerDocentePorId
+    @IdDocente INT
+AS
+BEGIN
+    SELECT * FROM docente WHERE id_docente = @IdDocente;
+END;
+GO
 
 -- Detalle_Docente_Curso
 CREATE PROCEDURE InsertarDetalleDocenteCurso
